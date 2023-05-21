@@ -54,5 +54,29 @@ namespace RegistrationService.Services
                 throw; // Rethrow the exception to be handled at the higher level
             }
         }
+        
+        // GetRegistrationsByEmail(email)
+        public List<Registration> GetRegistrationsByEmail(string email)
+        {
+            try
+            {
+                var registrations = _registrationRepository.GetRegistrationsByEmail(email);
+
+                _logger.LogInformation($"Found {registrations.Result.Count} registrations");
+                //show all registrations Name and Email
+                foreach (var registration in registrations.Result)
+                {
+                    _logger.LogInformation($"Registration: {registration.FirstName} - {registration.Email}");
+                }
+                //convert to list
+                return registrations.Result.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all registrations");
+                throw; // Rethrow the exception to be handled at the higher level
+            }
+        }
+        
     }
 }

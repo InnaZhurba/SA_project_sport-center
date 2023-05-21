@@ -20,7 +20,24 @@ namespace RegistrationService.DB
 
         public async Task SaveRegistration(Registration registration)
         {
-            // Logic to save registration using personal data
+            //check if registration is null
+            if (registration == null)
+            {
+                throw new ArgumentNullException(nameof(registration));
+            }
+            
+            //check if registration is already in DB 
+            var registrations = await GetRegistrationsByEmail(registration.Email);
+            //if registrations have the same first name and second name - throw exception
+            foreach (var reg in registrations)
+            {
+                if (reg.FirstName == registration.FirstName && reg.LastName == registration.LastName)
+                {
+                    var message = "Registration already exists in DB. Cannot save it again.";
+                    _logger.LogInformation(message);
+                    throw new Exception(message);
+                }
+            }
             
             var cql = @"INSERT INTO gym_people_management.personal_info (
                                                 id, first_name, last_name, email, address, birth_date,
@@ -73,6 +90,51 @@ namespace RegistrationService.DB
             try
             {
                 var result = await _session.ExecuteAsync(statement);
+                foreach (var row in result)
+                {
+                    int day = row.GetValue<LocalDate>("birth_date").Day;
+                    int month = row.GetValue<LocalDate>("birth_date").Month;
+                    int year = row.GetValue<LocalDate>("birth_date").Year;
+                    
+                    DateTime dateTime = new DateTime(year, month, day);
+                    
+                    var registration = new Registration
+                    {
+                        //Id = row.GetValue<Guid>("id").ToString(),
+                        FirstName = row.GetValue<string>("first_name"),
+                        LastName = row.GetValue<string>("last_name"),
+                        Email = row.GetValue<string>("email"),
+                        Address = row.GetValue<string>("address"),
+                        BirthDate = dateTime,
+                        BodyFat = row.GetValue<float>("body_fat").ToString(CultureInfo.InvariantCulture),
+                        Height = row.GetValue<float>("height").ToString(CultureInfo.InvariantCulture),
+                        Weight = row.GetValue<float>("weight").ToString(CultureInfo.InvariantCulture)
+                    };
+                    registrations.Add(registration);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting registrations from DB: {ex.Message}");
+                throw;
+            }
+
+            return registrations;
+        }
+        
+        // GetRegistrationsByEmail(email)
+        public async Task<List<Registration>> GetRegistrationsByEmail(string email)
+        {
+            _logger.LogInformation($"Getting registrations by email: {email}");
+            var cql = @"SELECT * FROM gym_people_management.personal_info WHERE email = ? ALLOW FILTERING";
+            var statement = new SimpleStatement(cql).Bind(email).SetPageSize(int.MaxValue);
+            statement.EnableTracing(true);
+
+            var registrations = new List<Registration>();
+
+            try
+            {
+                var result = await _session.ExecuteAsync(statement).ConfigureAwait(false);
                 foreach (var row in result)
                 {
                     int day = row.GetValue<LocalDate>("birth_date").Day;

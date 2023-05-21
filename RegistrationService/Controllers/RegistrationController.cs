@@ -53,5 +53,25 @@ namespace RegistrationService.Controllers
                 return StatusCode(500, "An error occurred while retrieving the registrations.");
             }
         }
+        
+        // get all registrations by email
+        [HttpGet("{email}")]
+        public IActionResult GetRegistrationsByEmail(string email)
+        {
+            try
+            {
+                var registrations = _registrationService.GetRegistrationsByEmail(email);
+
+                return new JsonResult(registrations);
+
+                //return Ok(registrations);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting registrations by email");
+                return StatusCode(500, "An error occurred while retrieving the registrations by email.");
+            }
+        }
+
     }
 }
