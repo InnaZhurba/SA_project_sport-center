@@ -7,6 +7,11 @@ using Newtonsoft.Json;
 
 namespace MembershipManagementMicroservice.Services;
 
+/// <summary>
+///   This class implements the IRegistrationService interface.
+///  It is used to interact with the User table of the database.
+///  It contains methods for registering a user, getting a user by id, getting a user by email, getting all users with a
+/// </summary>
 public class RegistrationService : IRegistrationService
 {
     
@@ -14,6 +19,18 @@ public class RegistrationService : IRegistrationService
     private readonly ILogger<RegistrationService> _logger;
     private readonly IKafkaConsumerService _kafkaConsumerService;
     
+    /// <summary>
+    ///  This constructor injects the IRegistrationRepository and ILogger interfaces.
+    /// </summary>
+    /// <param name="registrationRepository">
+    /// A IRegistrationRepository interface that is used to interact with the User table of the database.
+    /// </param>
+    /// <param name="logger">
+    /// A ILogger interface that is used to log information to the console.
+    /// </param>
+    /// <param name="kafkaConsumerService">
+    /// A IKafkaConsumerService interface that is used to consume messages from a Kafka topic.
+    /// </param>
     public RegistrationService( IRegistrationRepository registrationRepository, ILogger<RegistrationService> logger, IKafkaConsumerService kafkaConsumerService)
     {
         _registrationRepository = registrationRepository;
@@ -21,6 +38,12 @@ public class RegistrationService : IRegistrationService
         _kafkaConsumerService = kafkaConsumerService;
     }
     
+    /// <summary>
+    ///  This method is used to register a user.
+    /// </summary>
+    /// <returns>
+    /// A string that says whether the user was registered or not.
+    /// </returns>
     public async Task<string> RegisterUserAsync()
     {
         _logger.LogInformation("Registering user unpacked...");
@@ -65,6 +88,15 @@ public class RegistrationService : IRegistrationService
         return "User registered";
     }
     
+    /// <summary>
+    ///  This method is used to get a user by id.
+    /// </summary>
+    /// <param name="userId">
+    /// A string that represents the id of the user.
+    /// </param>
+    /// <returns>
+    /// A User object that represents the user.
+    /// </returns>
     public async Task<User?> GetUserAsync(string userId)
     {
         try
@@ -86,7 +118,15 @@ public class RegistrationService : IRegistrationService
         }
     }
     
-    // GetUserByEmailAsync
+    /// <summary>
+    ///  This method is used to get a user by email.
+    /// </summary>
+    /// <param name="email">
+    /// A string that represents the email of the user.
+    /// </param>
+    /// <returns>
+    /// A User object that represents the user.
+    /// </returns>
     public async Task<User> GetUserByEmailAsync(string email)
     {
         try
@@ -102,7 +142,15 @@ public class RegistrationService : IRegistrationService
         }
     }
     
-    // get all users with email
+    /// <summary>
+    ///  This method is used to get all users with a specific email.
+    /// </summary>
+    /// <param name="email">
+    /// A string that represents the email of the user.
+    /// </param>
+    /// <returns>
+    /// A List of User objects that represents the users.
+    /// </returns>
     public async Task<List<User>> GetAllUsersWithEmailAsync(string email)
     {
         try
@@ -118,7 +166,18 @@ public class RegistrationService : IRegistrationService
         }
     }
     
-    //GetUserByUsernameAndPasswordAsync
+    /// <summary>
+    ///  This method is used to get a user by username and password.
+    /// </summary>
+    /// <param name="username">
+    /// A string that represents the username of the user.
+    /// </param>
+    /// <param name="password">
+    /// A string that represents the password of the user.
+    /// </param>
+    /// <returns>
+    /// A User object that represents the user.
+    /// </returns>
     public async Task<User> GetUserByUsernameAndPasswordAsync(string username, string password)
     {
         try
@@ -134,7 +193,18 @@ public class RegistrationService : IRegistrationService
         }
     }
     
-    // GetUserByEmailAndPasswordAsync
+    /// <summary>
+    ///  This method is used to get a user by email and password.
+    /// </summary>
+    /// <param name="email">
+    /// A string that represents the email of the user.
+    /// </param>
+    /// <param name="password">
+    /// A string that represents the password of the user.
+    /// </param>
+    /// <returns>
+    /// A User object that represents the user.
+    /// </returns>
     public async Task<User> GetUserByEmailAndPasswordAsync(string email, string password)
     {
         try
@@ -150,7 +220,18 @@ public class RegistrationService : IRegistrationService
         }
     }
     
-    // EditUserAsync(userId, user)
+    /// <summary>
+    ///  This method is used to edit a user.
+    /// </summary>
+    /// <param name="userId">
+    /// A string that represents the id of the user.
+    /// </param>
+    /// <param name="user">
+    /// A User object that represents the user.
+    /// </param>
+    /// <returns>
+    /// A string that represents the result of the operation.
+    /// </returns>
     public async Task<string> EditUserAsync(string userId, User user)
     {
         try

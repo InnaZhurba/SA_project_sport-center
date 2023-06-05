@@ -1,5 +1,10 @@
 namespace MembershipManagementMicroservice.Models;
 
+/// <summary>
+///  The Membership class represents a membership in the MembershipManagementMicroservice
+///  It contains properties representing the membership's Id, UserId, MembershipType, StartDate, EndDate, and IsActive
+///  It is used by the MembershipController class
+/// </summary>
 public class Membership
 {
     public Guid Id { get; set; }

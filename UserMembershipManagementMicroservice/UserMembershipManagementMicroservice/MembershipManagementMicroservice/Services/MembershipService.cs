@@ -6,6 +6,11 @@ using Newtonsoft.Json;
 
 namespace MembershipManagementMicroservice.Services;
 
+/// <summary>
+///   This class implements the IMembershipService interface.
+///  It is used to interact with the Membership table of the database.
+///  It contains methods for creating a membership, getting a membership by id, getting all memberships with a given user id, and editing a membership.
+/// </summary>
 public class MembershipService : IMembershipService
 {
     private readonly IMembershipRepository _membershipRepository;
@@ -14,6 +19,21 @@ public class MembershipService : IMembershipService
     
     private readonly IRegistrationService _registrationService;
 
+    /// <summary>
+    ///  The constructor of the MembershipService class.
+    /// </summary>
+    /// <param name="membershipRepository">
+    /// A IMembershipRepository interface that is used to interact with the Membership table of the database.
+    /// </param>
+    /// <param name="kafkaConsumerService">
+    /// A IKafkaConsumerService interface that is used to consume messages from a Kafka topic.
+    /// </param>
+    /// <param name="logger">
+    /// A ILogger interface that is used to log information to the console.
+    /// </param>
+    /// <param name="registrationService">
+    /// A IRegistrationService interface that is used to interact with the User table of the database.
+    /// </param>
     public MembershipService(IMembershipRepository membershipRepository, IKafkaConsumerService kafkaConsumerService, ILogger<MembershipService> logger, IRegistrationService registrationService)
     {
         _membershipRepository = membershipRepository;
@@ -22,6 +42,12 @@ public class MembershipService : IMembershipService
         _registrationService = registrationService;
     }
 
+    /// <summary>
+    ///  This method is used to create a membership.
+    /// </summary>
+    /// <returns>
+    /// A string that says whether the membership was created or not.
+    /// </returns>
     public async Task<string> CreateMembershipAsync()
     {
         _logger.LogInformation("Creating membership unpacked...");
@@ -85,6 +111,15 @@ public class MembershipService : IMembershipService
         return "Membership created";
     }
 
+    /// <summary>
+    ///  This method is used to get a membership by id.
+    /// </summary>
+    /// <param name="membershipId">
+    ///  A string that represents the id of the membership.
+    /// </param>
+    /// <returns>
+    /// A Membership object that was asked.
+    /// </returns>
     public async Task<Membership> GetMembershipAsync(string membershipId)
     {
         try
@@ -100,7 +135,15 @@ public class MembershipService : IMembershipService
         }
     }
     
-    //GetMembershipsByUserIdAsync
+    /// <summary>
+    ///  This method is used to get all memberships with a given user id.
+    /// </summary>
+    /// <param name="userId">
+    /// A string that represents the id of the user.
+    /// </param>
+    /// <returns>
+    /// A list of Membership objects that were asked.
+    /// </returns>
     public async Task<List<Membership>> GetMembershipsByUserIdAsync(string userId)
     {
         try
@@ -116,7 +159,19 @@ public class MembershipService : IMembershipService
         }
     }
     
-    // EditMembershipAsync
+    
+    /// <summary>
+    ///  This method is used to edit a membership.
+    /// </summary>
+    /// <param name="membershipId">
+    /// A string that represents the id of the membership.
+    /// </param>
+    /// <param name="membership">
+    /// A Membership object that represents the membership that will be edited.
+    /// </param>
+    /// <returns>
+    /// A Membership object that was edited.
+    /// </returns>
     public async Task<Membership> EditMembershipAsync(string membershipId, Membership membership)
     {
         

@@ -1,0 +1,834 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MembershipManagementMicroservice</name>
+    </assembly>
+    <members>
+        <member name="T:MembershipManagementMicroservice.Controllers.MembershipController">
+            <summary>
+             The MembershipController class is a RESTful API controller class
+             It handles all HTTP requests to the /api/membership endpoint
+             It contains methods to create, retrieve, update, and membership data
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.MembershipController.#ctor(MembershipManagementMicroservice.Services.Interfaces.IMembershipService,MembershipManagementMicroservice.Kafka.IKafkaProducerService,Microsoft.Extensions.Logging.ILogger{MembershipManagementMicroservice.Controllers.MembershipController})">
+            <summary>
+             The constructor accepts two services and a logger as arguments and assigns them to private fields 
+            </summary>
+            <param name="membershipService">
+             The membershipService argument represents the IMembershipService interface
+            </param>
+            <param name="kafkaProducerService">
+            The kafkaProducerService argument represents the IKafkaProducerService interface
+            </param>
+            <param name="logger">
+            The logger argument represents the ILogger interface
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.MembershipController.CreateMembership(MembershipManagementMicroservice.Models.Membership)">
+            <summary>
+             The CreateMembership method accepts a Membership object as an argument and returns an IActionResult response 
+            </summary>
+            <param name="membership">
+            The membership argument represents a Membership object
+            </param>
+            <returns>
+            An IActionResult response
+            </returns>
+             <remarks>
+             Sample request:
+              POST /api/membership
+             {
+             "membershipType": "Gold",
+             "isActive": "Active",
+              "startDate": "2021-01-01",
+             "endDate": "2022-01-01",
+             "userId": "1234567890"
+             }
+             </remarks>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.MembershipController.GetMembership(System.String)">
+            <summary>
+             The GetMembership method accepts a membership ID as an argument and returns an IActionResult response
+             It invokes the GetMembershipAsync method from the membership service
+            </summary>
+            <param name="membershipId">
+            The membershipId argument represents a membership ID as a string
+            </param>
+            <returns>
+             An IActionResult response
+            </returns>
+            <remarks>
+             Sample request:
+             GET /api/membership/1234567890
+             </remarks>
+             <response code="200">Membership data retrieved successfully</response>
+             <response code="404">Membership not found</response>
+             <response code="500">An error occurred while retrieving the membership data</response>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.MembershipController.GetMembershipsByUserId(System.String)">
+            <summary>
+             The GetMembershipsByUserId method accepts a user ID as an argument and returns an IActionResult response
+             It invokes the GetMembershipsByUserIdAsync method from the membership service
+            </summary>
+            <param name="userId">
+            The userId argument represents a user ID as a string
+            </param>
+            <returns>
+            An IActionResult response
+            </returns>
+             <remarks>
+             Sample request:
+             GET /api/membership/user/1234567890
+             </remarks>
+             <response code="200">Memberships data retrieved successfully</response>
+             <response code="404">Memberships not found</response>
+             <response code="500">An error occurred while retrieving the memberships data</response>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.MembershipController.EditMembership(System.String,MembershipManagementMicroservice.Models.Membership)">
+            <summary>
+             The EditMembership method accepts a membership ID and a Membership object as arguments and returns an IActionResult response
+             It invokes the EditMembershipAsync method from the membership service
+            </summary>
+            <param name="membershipId">
+            The membershipId argument represents a membership ID as a string
+            </param>
+            <param name="membership">
+             The membership argument represents a Membership object
+            </param>
+            <returns>
+            An IActionResult response
+            </returns>
+            <remarks>
+             Sample request:
+             PUT /api/membership/edit/1234567890
+             {
+             "membershipType": "Gold",
+             "isActive": "Active",
+             "startDate": "2021-01-01",
+             "endDate": "2022-01-01",
+             "userId": "1234567890"
+             }
+             </remarks>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Controllers.RegistrationController">
+            <summary>
+              The RegistrationController class
+             Contains endpoints for the MembershipManagementMicroservice API
+             </summary>
+             <remarks>
+             <para>This class can create, retrieve, update user data.</para>
+             </remarks>
+             <response code="200">Returns the newly created user</response>
+             <response code="400">If the item is null</response>
+             <response code="500">If there was an internal server error</response>
+        </member>
+        <member name="F:MembershipManagementMicroservice.Controllers.RegistrationController._registrationService">
+            <summary>
+             The registration service
+            </summary>
+             <remarks>
+             <para>This service contains all methods for user registration.</para>
+             </remarks>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.RegistrationController.#ctor(MembershipManagementMicroservice.Services.Interfaces.IRegistrationService,MembershipManagementMicroservice.Kafka.IKafkaProducerService,Microsoft.Extensions.Logging.ILogger{MembershipManagementMicroservice.Controllers.RegistrationController})">
+            <summary>
+             The constructor for the RegistrationController class
+            </summary>
+            <param name="registrationService">
+            The registrationService argument represents the IRegistrationService interface
+            </param>
+            <param name="kafkaProducerService">
+            The kafkaProducerService argument represents the IKafkaProducerService interface
+            </param>
+            <param name="logger">
+            The logger argument represents the ILogger interface
+            </param>
+             <remarks>
+             <para>This constructor takes in a registration service, a Kafka producer service, and a logger.</para>
+             </remarks>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.RegistrationController.RegisterUser(MembershipManagementMicroservice.Models.User)">
+            <summary>
+             The RegisterUser method for the RegistrationController class that creates a new user
+            </summary>
+            <param name="user">
+            The user argument represents a User object
+            </param>
+            <returns>
+             A newly created user
+            </returns>
+             <remarks>
+             <para>This method takes in a user object and returns a newly created user.</para>
+             Sample request:
+              POST /api/registration
+             {
+             "Id": "string",
+             "userName": "string",
+             "email": "string",
+             "password": "string"
+             }
+             </remarks>
+             <response code="200">Returns the newly created user</response>
+             <response code="400">If the item is null</response>
+             <response code="500">If there was an internal server error</response>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.RegistrationController.GetUser(System.String)">
+            <summary>
+             The GetUser method for the RegistrationController class that retrieves a user by ID
+            </summary>
+            <param name="userId">
+            The userId argument represents a user ID in string format
+            </param>
+            <returns>
+            A user with the specified ID or a 404 Not Found response
+            </returns>
+             <remarks>
+             <para>This method takes in a user ID and returns a user with the specified ID.</para>
+             Sample request:
+             GET /api/registration/1
+             </remarks>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.RegistrationController.GetUserByEmail(System.String)">
+            <summary>
+             The GetUserByEmail method for the RegistrationController class that retrieves a user by email
+            </summary>
+            <param name="email">
+            The email argument represents a user email in string format
+            </param>
+            <returns>
+            A user with the specified email or a 404 Not Found response 
+            </returns>
+             <remarks>
+             <para>This method takes in an email and returns a user with the specified email.</para>
+             Sample request:
+             GET /api/registration/email/{email}
+             </remarks>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.RegistrationController.GetUserByUsernameAndPassword(System.String,System.String)">
+            <summary>
+             The GetUserByUsernameAndPassword method for the RegistrationController class that retrieves a user by username and password
+            </summary>
+            <param name="username">
+            The username argument represents a user username in string format
+            </param>
+            <param name="password">
+            The password argument represents a user password in string format
+            </param>
+            <returns>
+            A user with the specified username and password or a 404 Not Found response
+            </returns>
+             <remarks>
+             <para>This method takes in a username and password and returns a user with the specified username and password.</para>
+             Sample request:
+              GET /api/registration/username/{username}/password/{password}
+            </remarks>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.RegistrationController.GetUserByEmailAndPassword(System.String,System.String)">
+            <summary>
+             The GetUserByEmailAndPassword method for the RegistrationController class that retrieves a user by email and password
+            </summary>
+            <param name="email">
+            The email argument represents a user email in string format
+            </param>
+            <param name="password">
+            The password argument represents a user password in string format
+            </param>
+            <returns>
+            A user with the specified email and password or a 404 Not Found response
+            </returns>
+             <remarks>
+             <para>This method takes in a user object and returns a newly created user.</para>
+             Sample request:
+              GET /api/registration/email/{email}/password/{password}
+             </remarks>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.RegistrationController.EditUser(System.String,MembershipManagementMicroservice.Models.User)">
+            <summary>
+             The EditUser method for the RegistrationController class that edits a user by ID
+            </summary>
+            <param name="userId">
+            The userId argument represents a user ID in string format
+            </param>
+            <param name="user">
+            The user argument represents a user object
+            </param>
+            <returns>
+            A user with the specified ID that is edited or a 404 Not Found response
+            </returns>
+             <remarks>
+             Sample request:
+              PUT /api/registration/edit/{userId}
+             {
+              "userId": "1",
+             "username": "user1",
+             "password": "password1",
+             "email": "user1@gmail"
+             }
+             </remarks>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Infrastructure.CassandraConfig">
+            <summary>
+              This class is used to configure the Cassandra database.
+             It is used to create the keyspace and tables.
+             It is also used to execute queries.
+            </summary>
+             <remarks>
+             Sample code:
+             var cassandraConfig = new CassandraConfig();
+             cassandraConfig.CreateKeyspace("membership_management");
+             cassandraConfig.CreateTable("users", "id uuid PRIMARY KEY, username text, password text, email text");
+             cassandraConfig.CreateTable("memberships", "id uuid PRIMARY KEY, membership_type text, is_active text, start_date date, end_date date, user_id uuid");
+             </remarks>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Infrastructure.CassandraConfig.#ctor">
+            <summary>
+             The constructor creates a Cassandra cluster and session
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Infrastructure.CassandraConfig.CreateKeyspace(System.String)">
+            <summary>
+                The CreateKeyspace method accepts a string argument and creates a keyspace if it does not exist
+            </summary>
+            <param name="keyspace">
+               The keyspace argument represents the name of the keyspace to be created in string format
+            </param>
+             <remarks>
+             Sample code:
+             var cassandraConfig = new CassandraConfig();
+             cassandraConfig.CreateKeyspace("membership_management");
+             </remarks>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Infrastructure.CassandraConfig.CreateTable(System.String,System.String)">
+            <summary>
+              The CreateTable method accepts two string arguments and creates a table if it does not exist
+            </summary>
+            <param name="tableName">
+              The tableName argument represents the name of the table to be created in string format
+            </param>
+            <param name="schema">
+             The schema argument represents the schema of the table to be created in string format
+            </param>
+             <remarks>
+             Sample code:
+             var cassandraConfig = new CassandraConfig();
+             cassandraConfig.CreateTable("users", "id uuid PRIMARY KEY, username text, password text, email text");
+             </remarks>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Infrastructure.CassandraConfig.ExecuteQuery(System.String)">
+            <summary>
+                The ExecuteQuery method accepts a string argument and executes a query
+            </summary>
+            <param name="query">
+              The query argument represents the query to be executed in string format
+            </param>
+             <remarks>
+             Sample code:
+             var cassandraConfig = new CassandraConfig();
+             cassandraConfig.ExecuteQuery("INSERT INTO users (id, username, password, email) VALUES (uuid(), 'testuser', 'testpassword', 'testemail')");
+             </remarks>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Infrastructure.CassandraConfig.ExecuteQuery(System.String,System.Object[])">
+            <summary>
+                The ExecuteQuery method accepts a string argument and executes a query
+            </summary>
+            <param name="query">
+             The query argument represents the query to be executed in string format
+            </param>
+            <param name="args">
+            The args argument represents the arguments to be passed to the query
+            </param>
+            <returns>
+             Returns a RowSet object that contains the results of the query execution 
+            </returns>
+             <remarks>
+             Sample code:
+             var cassandraConfig = new CassandraConfig();
+             var rowSet = cassandraConfig.ExecuteQuery("SELECT * FROM users WHERE username = ?", "testuser");
+             </remarks>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Infrastructure.CassandraConfig.Dispose">
+            <summary>
+              The Dispose method is used to dispose of the Cassandra session object
+            </summary>
+             <remarks>
+             Sample code:
+             var cassandraConfig = new CassandraConfig();
+             cassandraConfig.Dispose();
+             </remarks>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Kafka.IKafkaConsumerService">
+            <summary>
+              This interface is used to consume messages from Kafka.
+             It is implemented by the KafkaConsumer class.
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Kafka.IKafkaConsumerService.ConsumeMessagesAsync(System.String)">
+            <summary>
+             This method is used to consume messages from Kafka.
+            </summary>
+            <param name="topic">
+            The topic argument represents the Kafka topic to consume messages from in string format
+            </param>
+            <returns>
+            A string representing the consumed message from Kafka or null
+            </returns>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Kafka.IKafkaProducerService">
+            <summary>
+                 This interface is used to produce messages to Kafka.
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Kafka.IKafkaProducerService.SendMessageAsync(System.String,System.String)">
+            <summary>
+              This method is used to produce messages to Kafka. 
+            </summary>
+            <param name="topic">
+            The topic argument represents the Kafka topic to produce messages to in string format
+            </param>
+            <param name="message">
+            The message argument represents the message to produce to Kafka in string format
+            </param>
+            <returns>
+            A Task representing the asynchronous operation of producing a message to Kafka or null 
+            </returns>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Kafka.KafkaConsumer">
+            <summary>
+                 This class is used to consume messages from Kafka.
+               It implements the IKafkaConsumerService interface.
+             It is used by the KafkaConsumerController class.
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Kafka.KafkaConsumer.#ctor(Confluent.Kafka.ConsumerConfig,Microsoft.Extensions.Logging.ILogger{MembershipManagementMicroservice.Kafka.KafkaConsumer})">
+            <summary>
+               This constructor is used to inject the ConsumerConfig and ILogger(KafkaConsumer) dependencies.
+            </summary>
+            <param name="consumerConfig">
+            The consumerConfig argument represents the ConsumerConfig dependency used to configure the Kafka consumer
+            </param>
+            <param name="logger">
+            The logger argument represents the ILogger(KafkaConsumer) dependency used to log messages to the console
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Kafka.KafkaConsumer.ConsumeMessagesAsync(System.String)">
+            <summary>
+             This method is used to consume messages from Kafka.
+             It accepts a topic as an argument and returns a string representing the consumed message from Kafka or null.
+            </summary>
+            <param name="topic">
+            The topic argument represents the Kafka topic to consume messages from in string format
+            </param>
+            <returns>
+            A string representing the consumed message from Kafka or null 
+            </returns>
+             <exception cref="T:Confluent.Kafka.ConsumeException">
+             Thrown when an error occurs while consuming messages from Kafka
+             </exception>
+             <exception cref="T:System.OperationCanceledException">
+             Thrown when the consumer is closed
+             </exception>
+             <exception cref="T:System.Exception">
+             Thrown when an error occurs while consuming messages from Kafka
+             </exception>
+             <exception cref="T:System.ArgumentException">
+             Thrown when the topic argument is null or empty
+             </exception>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Kafka.KafkaProducer">
+            <summary>
+                 This class is used to produce messages to Kafka.
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Kafka.KafkaProducer.#ctor(Confluent.Kafka.ProducerConfig,Microsoft.Extensions.Logging.ILogger{MembershipManagementMicroservice.Kafka.KafkaProducer})">
+            <summary>
+                This constructor is used to inject the ProducerConfig and ILogger(KafkaProducer) dependencies.
+            </summary>
+            <param name="producerConfig">
+            The producerConfig argument represents the ProducerConfig dependency used to configure the Kafka producer
+            </param>
+            <param name="logger">
+            The logger argument represents the ILogger(KafkaProducer) dependency used to log messages to the console
+            </param>
+             <exception cref="T:System.ArgumentNullException">
+             Thrown when the producerConfig or logger argument is null
+             </exception>
+             <exception cref="T:System.ArgumentException">
+             Thrown when the producerConfig or logger argument is invalid
+             </exception>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Kafka.KafkaProducer.SendMessageAsync(System.String,System.String)">
+            <summary>
+             This method is used to produce messages to Kafka.
+             It accepts a topic and message as arguments and returns a Task representing the asynchronous operation of producing a message to Kafka or null.
+            </summary>
+            <param name="topic">
+            The topic argument represents the Kafka topic to produce messages to in string format
+            </param>
+            <param name="message">
+            The message argument represents the message to produce to Kafka in string format
+            </param>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Models.Membership">
+            <summary>
+             The Membership class represents a membership in the MembershipManagementMicroservice
+             It contains properties representing the membership's Id, UserId, MembershipType, StartDate, EndDate, and IsActive
+             It is used by the MembershipController class
+            </summary>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Models.User">
+            <summary>
+             The User class represents a user in the MembershipManagementMicroservice
+             It contains properties representing the user's Id, Username, Password, and Email
+             It is used by the MembershipController class
+            </summary>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Repository.Interfaces.IMembershipRepository">
+            <summary>
+             This interface is used to interact with the Membership table of the database.
+             It is implemented by the MembershipRepository class.
+            </summary>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Repository.Interfaces.IRegistrationRepository">
+            <summary>
+             This interface is used to interact with the User table of the database.
+             It is implemented by the RegistrationRepository class.
+             It contains methods for registering a user, getting a user by id, getting a user by email, getting all users with a given email, getting a user by username and password, getting a user by email and password, and editing a user.
+             It is used by the RegistrationController class.
+            </summary>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Repository.MembershipRepository">
+            <summary>
+             This class is used to interact with the Membership table of the database.
+             It implements the IMembershipRepository interface.
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.MembershipRepository.#ctor(MembershipManagementMicroservice.Infrastructure.CassandraConfig)">
+            <summary>
+             This constructor is used to inject the CassandraConfig into the MembershipRepository class.
+            </summary>
+            <param name="cassandraConfig">
+            The cassandraConfig argument represents the CassandraConfig dependency used to configure the Cassandra database
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.MembershipRepository.CreateMembershipAsync(MembershipManagementMicroservice.Models.Membership)">
+            <summary>
+             This method is used to create a membership in the database.
+            </summary>
+            <param name="membership">
+            The membership argument represents the membership to be created in the database
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.MembershipRepository.GetMembershipAsync(System.String)">
+            <summary>
+             This method is used to get a membership from the database.
+            </summary>
+            <param name="membershipId">
+            The membershipId argument represents the id of the membership to be retrieved from the database
+            </param>
+            <returns>
+            The method returns a Membership object if the membership is found in the database, otherwise it returns null
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.MembershipRepository.GetMembershipsByUserIdAsync(System.String)">
+            <summary>
+                 This method is used to get a list of memberships from the database.
+            </summary>
+            <param name="userId">
+            The userId argument represents the id of the user whose memberships are to be retrieved from the database 
+            </param>
+            <returns>
+            The method returns a list of Membership objects if the user has memberships in the database, otherwise it returns an empty list of Membership objects
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.MembershipRepository.EditMembershipAsync(MembershipManagementMicroservice.Models.Membership)">
+            <summary>
+             This method is used to edit a membership in the database.
+            </summary>
+            <param name="membership">
+            The membership argument represents the membership to be edited in the database 
+            </param>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Repository.RegistrationRepository">
+            <summary>
+             This class is used to interact with the User table of the database.
+             It implements the IRegistrationRepository interface.
+             It is used by the RegistrationController class.
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.RegistrationRepository.#ctor(MembershipManagementMicroservice.Infrastructure.CassandraConfig)">
+            <summary>
+             This constructor is used to inject the CassandraConfig into the RegistrationRepository class.
+            </summary>
+            <param name="cassandraConfig">
+            The cassandraConfig argument represents the CassandraConfig dependency used to configure the Cassandra database
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.RegistrationRepository.RegisterUserAsync(MembershipManagementMicroservice.Models.User)">
+            <summary>
+             This method is used to register a user in the database.
+            </summary>
+            <param name="user">
+            The user argument represents the user to be registered in the database 
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.RegistrationRepository.GetUserAsync(System.String)">
+            <summary>
+             This method is used to get a user from the database.
+            </summary>
+            <param name="userId">
+            The userId argument represents the id of the user to be retrieved from the database
+            </param>
+            <returns>
+            The method returns a User object if the user is found in the database, otherwise it returns null
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.RegistrationRepository.GetUserByEmailAsync(System.String)">
+            <summary>
+             This method is used to get a user from the database.
+            </summary>
+            <param name="email">
+            The email argument represents the email of the user to be retrieved from the database
+            </param>
+            <returns>
+            The method returns a User object if the user is found in the database, otherwise it returns null 
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.RegistrationRepository.GetAllUsersWithEmailAsync(System.String)">
+            <summary>
+                This method is used to get all users with a given email from the database.
+            </summary>
+            <param name="email">
+               The email argument represents the email of the users to be retrieved from the database
+            </param>
+            <returns>
+              The method returns a list of User objects if the users are found in the database, otherwise it returns an empty list
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.RegistrationRepository.GetUserByUsernameAndPasswordAsync(System.String,System.String)">
+            <summary>
+                This method is used to get user with a given username and password from the database.
+            </summary>
+            <param name="username">
+              The username argument represents the username of the users to be retrieved from the database
+            </param>
+            <param name="password">
+             The password argument represents the password of the users to be retrieved from the database
+            </param>
+            <returns>
+             The method returns a user object from User objects if the users are found in the database, otherwise it returns an empty list
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.RegistrationRepository.GetUserByEmailAndPasswordAsync(System.String,System.String)">
+            <summary>
+              This method is used to get user with a given email and password from the database.
+            </summary>
+            <param name="email">
+             The email argument represents the email of the users to be retrieved from the database
+            </param>
+            <param name="password">
+            The password argument represents the password of the users to be retrieved from the database
+            </param>
+            <returns>
+            The method returns a user object from User objects if the users are found in the database, otherwise it returns an empty list
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.RegistrationRepository.EditUserAsync(MembershipManagementMicroservice.Models.User)">
+            <summary>
+             This method is used to edit a user in the database.
+            </summary>
+            <param name="user">
+            The user argument represents the user to be edited in the database
+            </param>
+            <returns>
+            The method returns a string message if the user is edited successfully
+            </returns>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Services.Interfaces.IMembershipService">
+            <summary>
+             This interface is used to interact with the Membership table of the database.
+             It is implemented by the MembershipService class.
+             It contains methods for creating a membership, getting a membership by id, getting all memberships with a given user id, and editing a membership.
+            </summary>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Services.Interfaces.IRegistrationService">
+            <summary>
+                This interface is used to interact with the User table of the database.
+                It is implemented by the RegistrationService class.
+              It contains methods for registering a user, getting a user by id, getting a user by email, getting all users with a
+            </summary>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Services.MembershipService">
+            <summary>
+              This class implements the IMembershipService interface.
+             It is used to interact with the Membership table of the database.
+             It contains methods for creating a membership, getting a membership by id, getting all memberships with a given user id, and editing a membership.
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.MembershipService.#ctor(MembershipManagementMicroservice.Repository.Interfaces.IMembershipRepository,MembershipManagementMicroservice.Kafka.IKafkaConsumerService,Microsoft.Extensions.Logging.ILogger{MembershipManagementMicroservice.Services.MembershipService},MembershipManagementMicroservice.Services.Interfaces.IRegistrationService)">
+            <summary>
+             The constructor of the MembershipService class.
+            </summary>
+            <param name="membershipRepository">
+            A IMembershipRepository interface that is used to interact with the Membership table of the database.
+            </param>
+            <param name="kafkaConsumerService">
+            A IKafkaConsumerService interface that is used to consume messages from a Kafka topic.
+            </param>
+            <param name="logger">
+            A ILogger interface that is used to log information to the console.
+            </param>
+            <param name="registrationService">
+            A IRegistrationService interface that is used to interact with the User table of the database.
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.MembershipService.CreateMembershipAsync">
+            <summary>
+             This method is used to create a membership.
+            </summary>
+            <returns>
+            A string that says whether the membership was created or not.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.MembershipService.GetMembershipAsync(System.String)">
+            <summary>
+             This method is used to get a membership by id.
+            </summary>
+            <param name="membershipId">
+             A string that represents the id of the membership.
+            </param>
+            <returns>
+            A Membership object that was asked.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.MembershipService.GetMembershipsByUserIdAsync(System.String)">
+            <summary>
+             This method is used to get all memberships with a given user id.
+            </summary>
+            <param name="userId">
+            A string that represents the id of the user.
+            </param>
+            <returns>
+            A list of Membership objects that were asked.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.MembershipService.EditMembershipAsync(System.String,MembershipManagementMicroservice.Models.Membership)">
+            <summary>
+             This method is used to edit a membership.
+            </summary>
+            <param name="membershipId">
+            A string that represents the id of the membership.
+            </param>
+            <param name="membership">
+            A Membership object that represents the membership that will be edited.
+            </param>
+            <returns>
+            A Membership object that was edited.
+            </returns>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Services.RegistrationService">
+            <summary>
+              This class implements the IRegistrationService interface.
+             It is used to interact with the User table of the database.
+             It contains methods for registering a user, getting a user by id, getting a user by email, getting all users with a
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.RegistrationService.#ctor(MembershipManagementMicroservice.Repository.Interfaces.IRegistrationRepository,Microsoft.Extensions.Logging.ILogger{MembershipManagementMicroservice.Services.RegistrationService},MembershipManagementMicroservice.Kafka.IKafkaConsumerService)">
+            <summary>
+             This constructor injects the IRegistrationRepository and ILogger interfaces.
+            </summary>
+            <param name="registrationRepository">
+            A IRegistrationRepository interface that is used to interact with the User table of the database.
+            </param>
+            <param name="logger">
+            A ILogger interface that is used to log information to the console.
+            </param>
+            <param name="kafkaConsumerService">
+            A IKafkaConsumerService interface that is used to consume messages from a Kafka topic.
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.RegistrationService.RegisterUserAsync">
+            <summary>
+             This method is used to register a user.
+            </summary>
+            <returns>
+            A string that says whether the user was registered or not.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.RegistrationService.GetUserAsync(System.String)">
+            <summary>
+             This method is used to get a user by id.
+            </summary>
+            <param name="userId">
+            A string that represents the id of the user.
+            </param>
+            <returns>
+            A User object that represents the user.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.RegistrationService.GetUserByEmailAsync(System.String)">
+            <summary>
+             This method is used to get a user by email.
+            </summary>
+            <param name="email">
+            A string that represents the email of the user.
+            </param>
+            <returns>
+            A User object that represents the user.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.RegistrationService.GetAllUsersWithEmailAsync(System.String)">
+            <summary>
+             This method is used to get all users with a specific email.
+            </summary>
+            <param name="email">
+            A string that represents the email of the user.
+            </param>
+            <returns>
+            A List of User objects that represents the users.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.RegistrationService.GetUserByUsernameAndPasswordAsync(System.String,System.String)">
+            <summary>
+             This method is used to get a user by username and password.
+            </summary>
+            <param name="username">
+            A string that represents the username of the user.
+            </param>
+            <param name="password">
+            A string that represents the password of the user.
+            </param>
+            <returns>
+            A User object that represents the user.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.RegistrationService.GetUserByEmailAndPasswordAsync(System.String,System.String)">
+            <summary>
+             This method is used to get a user by email and password.
+            </summary>
+            <param name="email">
+            A string that represents the email of the user.
+            </param>
+            <param name="password">
+            A string that represents the password of the user.
+            </param>
+            <returns>
+            A User object that represents the user.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.RegistrationService.EditUserAsync(System.String,MembershipManagementMicroservice.Models.User)">
+            <summary>
+             This method is used to edit a user.
+            </summary>
+            <param name="userId">
+            A string that represents the id of the user.
+            </param>
+            <param name="user">
+            A User object that represents the user.
+            </param>
+            <returns>
+            A string that represents the result of the operation.
+            </returns>
+        </member>
+    </members>
+</doc>
