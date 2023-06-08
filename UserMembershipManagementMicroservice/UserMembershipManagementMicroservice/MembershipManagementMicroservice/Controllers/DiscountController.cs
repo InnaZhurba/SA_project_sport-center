@@ -52,6 +52,16 @@ public class DiscountController : ControllerBase
     /// <returns>
     /// An IActionResult response as string with the result of the operation
     /// </returns>
+    /// <example>
+    ///  POST: api/discount
+    /// {
+    ///     "UserId": "123e4552-e89b-12d3-a456-426614164400",
+    ///     "Percentage": 17.3,
+    ///     "StartDate": "2023-06-29T10:00:00Z",
+    ///     "EndDate": "2023-08-05T10:00:00Z",
+    ///     "IsActive": false
+    /// }
+    /// </example>
     [HttpPost]
     public async Task<IActionResult> CreateDiscountAsync(Discount discount)
     {
@@ -83,6 +93,9 @@ public class DiscountController : ControllerBase
     /// <returns>
     /// An IActionResult response as string with the result of the operation (string with result)
     /// </returns>
+    ///  <example>
+    /// GET: api/discount/id/123e4552-e89b-12d3-a456-426614164400
+    ///  </example>
     [HttpGet("id/{discountId}")]
     public async Task<IActionResult> GetDiscountByIdAsync(string discountId)
     {
@@ -108,6 +121,9 @@ public class DiscountController : ControllerBase
     /// <returns>
     /// An IActionResult response as string with the result of the operation (string with the result)
     /// </returns>
+    /// <example>
+    ///  GET: api/discount/user/123e4552-e89b-12d3-a456-426614164400
+    /// </example>
     [HttpGet("user/{userId}")]
     public async Task<IActionResult> GetDiscountByUserIdAsync(string userId)
     {
@@ -133,6 +149,18 @@ public class DiscountController : ControllerBase
     /// <returns>
     /// An IActionResult response as string with the result of the operation (string with the result)
     /// </returns>
+    ///
+    ///  <example>
+    /// PUT: api/discount
+    ///  {
+    ///  "Id": "123e4552-e89b-1862-a456-426676796900",
+    ///   "UserId": "123e4552-e89b-12d3-a456-426614164400",
+    ///  "Percentage": 17.3,
+    ///  "StartDate": "2023-06-29T10:00:00Z",
+    ///  "EndDate": "2023-08-05T10:00:00Z",
+    ///  "IsActive": false
+    ///  }
+    ///  </example>
     [HttpPut]
     public async Task<IActionResult> UpdateDiscountAsync(Discount discount)
     {
@@ -159,6 +187,9 @@ public class DiscountController : ControllerBase
     /// <returns>
     /// An IActionResult response as string with the result of the operation (string with the result)
     /// </returns>
+    ///  <example>
+    ///  DELETE: api/discount/123e4552-e89b-12d3-a456-426614164400
+    ///  </example>
     [HttpDelete("{discountId}")]
     public async Task<IActionResult> DeleteDiscountByIdAsync(string discountId)
     {
@@ -177,7 +208,7 @@ public class DiscountController : ControllerBase
     }
 
     /// <summary>
-    ///  The GetActiveDiscountsByUserIdAsync gets all active Discount objects from the database with some userId and returns an IActionResult response
+    ///  The GetActiveDiscountsByUserIdAsync gets all Discount objects from the database with some userId and returns an IActionResult response
     /// </summary>
     /// <param name="userId">
     /// The userId argument represents a Discount object
@@ -185,6 +216,9 @@ public class DiscountController : ControllerBase
     /// <returns>
     /// An IActionResult response as string with the result of the operation (string with the result)
     /// </returns>
+    ///  <example>
+    ///  GET: api/discount/user/all/123e4552-e89b-12d3-a456-426614164400
+    ///  </example>
     [HttpGet("user/all/{userId}")]
     public async Task<IActionResult> GetDiscountsByUserIdAsync(string userId)
     {

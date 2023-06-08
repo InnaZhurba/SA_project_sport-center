@@ -35,6 +35,16 @@
             <returns>
             An IActionResult response as string with the result of the operation
             </returns>
+            <example>
+             POST: api/discount
+            {
+                "UserId": "123e4552-e89b-12d3-a456-426614164400",
+                "Percentage": 17.3,
+                "StartDate": "2023-06-29T10:00:00Z",
+                "EndDate": "2023-08-05T10:00:00Z",
+                "IsActive": false
+            }
+            </example>
         </member>
         <member name="M:MembershipManagementMicroservice.Controllers.DiscountController.GetDiscountByIdAsync(System.String)">
             <summary>
@@ -46,6 +56,9 @@
             <returns>
             An IActionResult response as string with the result of the operation (string with result)
             </returns>
+             <example>
+            GET: api/discount/id/123e4552-e89b-12d3-a456-426614164400
+             </example>
         </member>
         <member name="M:MembershipManagementMicroservice.Controllers.DiscountController.GetDiscountByUserIdAsync(System.String)">
             <summary>
@@ -57,17 +70,32 @@
             <returns>
             An IActionResult response as string with the result of the operation (string with the result)
             </returns>
+            <example>
+             GET: api/discount/user/123e4552-e89b-12d3-a456-426614164400
+            </example>
         </member>
         <member name="M:MembershipManagementMicroservice.Controllers.DiscountController.UpdateDiscountAsync(MembershipManagementMicroservice.Models.Discount)">
-            <summary>
-            The UpdateDiscountAsync method updating a Discount object and returns an IActionResult response
-            </summary>
-            <param name="discount">
-            The discount argument represents a Discount object
-            </param>
-            <returns>
-            An IActionResult response as string with the result of the operation (string with the result)
-            </returns>
+             <summary>
+             The UpdateDiscountAsync method updating a Discount object and returns an IActionResult response
+             </summary>
+             <param name="discount">
+             The discount argument represents a Discount object
+             </param>
+             <returns>
+             An IActionResult response as string with the result of the operation (string with the result)
+             </returns>
+            
+              <example>
+             PUT: api/discount
+              {
+              "Id": "123e4552-e89b-1862-a456-426676796900",
+               "UserId": "123e4552-e89b-12d3-a456-426614164400",
+              "Percentage": 17.3,
+              "StartDate": "2023-06-29T10:00:00Z",
+              "EndDate": "2023-08-05T10:00:00Z",
+              "IsActive": false
+              }
+              </example>
         </member>
         <member name="M:MembershipManagementMicroservice.Controllers.DiscountController.DeleteDiscountByIdAsync(System.String)">
             <summary>
@@ -79,10 +107,13 @@
             <returns>
             An IActionResult response as string with the result of the operation (string with the result)
             </returns>
+             <example>
+             DELETE: api/discount/123e4552-e89b-12d3-a456-426614164400
+             </example>
         </member>
         <member name="M:MembershipManagementMicroservice.Controllers.DiscountController.GetDiscountsByUserIdAsync(System.String)">
             <summary>
-             The GetActiveDiscountsByUserIdAsync gets all active Discount objects from the database with some userId and returns an IActionResult response
+             The GetActiveDiscountsByUserIdAsync gets all Discount objects from the database with some userId and returns an IActionResult response
             </summary>
             <param name="userId">
             The userId argument represents a Discount object
@@ -90,6 +121,9 @@
             <returns>
             An IActionResult response as string with the result of the operation (string with the result)
             </returns>
+             <example>
+             GET: api/discount/user/all/123e4552-e89b-12d3-a456-426614164400
+             </example>
         </member>
         <member name="T:MembershipManagementMicroservice.Controllers.MembershipController">
             <summary>
