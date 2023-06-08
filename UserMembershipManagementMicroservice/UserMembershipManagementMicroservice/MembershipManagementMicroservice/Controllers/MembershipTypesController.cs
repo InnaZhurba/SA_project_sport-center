@@ -55,7 +55,7 @@ public class MembershipTypesController  : ControllerBase
         {
             var membershiptypeJson = JsonConvert.SerializeObject(membershipType);
             
-            var result1 = Task.Run(() => _kafkaProducerService.SendMessageAsync("membership_type_get_topic", membershiptypeJson));
+            var result1 = Task.Run(() => _kafkaProducerService.SendMessageAsync("membership_type_post_topic", membershiptypeJson));
             _logger.LogInformation("MembershipType sended to Kafka topic.");
             
             var result2 = Task.Run(() => _membershipTypesService.CreateMembershipTypeAsync());

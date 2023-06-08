@@ -56,6 +56,9 @@ public class RegistrationService : IRegistrationService
         var user = JsonConvert.DeserializeObject<User>(userJson);
         _logger.LogInformation($"User: {user}");
         
+        //create user id
+        user.Id = Guid.NewGuid();
+        
         // check if user id exists
         var userById = await _registrationRepository.GetUserAsync(user.Id.ToString());
         if (userById != null)

@@ -2,6 +2,9 @@ using MembershipManagementMicroservice.Models;
 
 namespace MembershipManagementMicroservice.Services.Interfaces;
 
+/// <summary>
+///  This interface is used to interact with the MembershipType table of the database.
+/// </summary>
 public interface IMembershipTypesService
 {
     Task<string> CreateMembershipTypeAsync();

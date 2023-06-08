@@ -59,11 +59,14 @@ namespace MembershipManagementMicroservice
             services.AddScoped<IRegistrationRepository, RegistrationRepository>();
             services.AddScoped<IMembershipRepository, MembershipRepository>();
             services.AddScoped<IMembershipTypesRepository, MembershipTypesRepository>();
+            services.AddScoped<IDiscountRepository, DiscountRepository>();
 
             // Register services
             services.AddScoped<IRegistrationService, RegistrationService>();
             services.AddScoped<IMembershipService, MembershipService>();
             services.AddScoped<IMembershipTypesService, MembershipTypesService>();
+            services.AddScoped<IDiscountService, DiscountService>();
+            
             services.AddSingleton<IKafkaProducerService, KafkaProducer>();
             services.AddSingleton<IKafkaConsumerService, KafkaConsumer>();
 

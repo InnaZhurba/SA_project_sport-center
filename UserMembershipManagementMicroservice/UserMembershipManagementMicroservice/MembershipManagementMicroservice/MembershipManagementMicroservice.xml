@@ -4,6 +4,93 @@
         <name>MembershipManagementMicroservice</name>
     </assembly>
     <members>
+        <member name="T:MembershipManagementMicroservice.Controllers.DiscountController">
+            <summary>
+             The MembershipTypesController class is a RESTful API controller class
+             It handles all HTTP requests to the /api/membershipTypes endpoint
+             It inherits ControllerBase
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.DiscountController.#ctor(MembershipManagementMicroservice.Services.Interfaces.IDiscountService,MembershipManagementMicroservice.Kafka.IKafkaProducerService,Microsoft.Extensions.Logging.ILogger{MembershipManagementMicroservice.Controllers.MembershipController})">
+            <summary>
+             The constructor accepts two services and a logger as arguments and assigns them to private fields
+            </summary>
+            <param name="discountService">
+            The discountService argument represents the IDiscountService interface
+            </param>
+            <param name="kafkaProducerService">
+            The kafkaProducerService argument represents the IKafkaProducerService interface
+            </param>
+            <param name="logger">
+            The logger argument represents the ILogger interface
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.DiscountController.CreateDiscountAsync(MembershipManagementMicroservice.Models.Discount)">
+            <summary>
+             The CreateDiscountAsync method accepts a Discount object as an argument and returns an IActionResult response
+            </summary>
+            <param name="discount">
+            The discount argument represents a Discount object
+            </param>
+            <returns>
+            An IActionResult response as string with the result of the operation
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.DiscountController.GetDiscountByIdAsync(System.String)">
+            <summary>
+             The GetAllDiscountsAsync gets all Discount objects from the database with some id and returns an IActionResult response
+            </summary>
+            <param name="discountId">
+            The discountId argument represents a Discount object
+            </param>
+            <returns>
+            An IActionResult response as string with the result of the operation (string with result)
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.DiscountController.GetDiscountByUserIdAsync(System.String)">
+            <summary>
+             The GetAllDiscountsAsync gets all Discount objects from the database with some userId and returns an IActionResult response
+            </summary>
+            <param name="userId">
+            The userId argument represents a Discount object
+            </param>
+            <returns>
+            An IActionResult response as string with the result of the operation (string with the result)
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.DiscountController.UpdateDiscountAsync(MembershipManagementMicroservice.Models.Discount)">
+            <summary>
+            The UpdateDiscountAsync method updating a Discount object and returns an IActionResult response
+            </summary>
+            <param name="discount">
+            The discount argument represents a Discount object
+            </param>
+            <returns>
+            An IActionResult response as string with the result of the operation (string with the result)
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.DiscountController.DeleteDiscountByIdAsync(System.String)">
+            <summary>
+             The DeleteDiscountByIdAsync method deleting a Discount object and returns an IActionResult response
+            </summary>
+            <param name="discountId">
+            The discountId argument represents a id of Discount object as string
+            </param>
+            <returns>
+            An IActionResult response as string with the result of the operation (string with the result)
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.DiscountController.GetDiscountsByUserIdAsync(System.String)">
+            <summary>
+             The GetActiveDiscountsByUserIdAsync gets all active Discount objects from the database with some userId and returns an IActionResult response
+            </summary>
+            <param name="userId">
+            The userId argument represents a Discount object
+            </param>
+            <returns>
+            An IActionResult response as string with the result of the operation (string with the result)
+            </returns>
+        </member>
         <member name="T:MembershipManagementMicroservice.Controllers.MembershipController">
             <summary>
              The MembershipController class is a RESTful API controller class
@@ -552,11 +639,25 @@
             The message argument represents the message to produce to Kafka in string format
             </param>
         </member>
+        <member name="T:MembershipManagementMicroservice.Models.Discount">
+            <summary>
+             The Discount class represents a Discount object
+             It contains properties that represent the database columns
+             Discount needed to see if a user is eligible for a discount
+            </summary>
+        </member>
         <member name="T:MembershipManagementMicroservice.Models.Membership">
             <summary>
              The Membership class represents a membership in the MembershipManagementMicroservice
              It contains properties representing the membership's Id, UserId, MembershipType, StartDate, EndDate, and IsActive
              It is used by the MembershipController class
+            </summary>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Models.MembershipType">
+            <summary>
+             The MembershipType class represents a MembershipType object
+             It contains properties that represent the database columns
+             It shows the different types of memberships that a user can have
             </summary>
         </member>
         <member name="T:MembershipManagementMicroservice.Models.User">
@@ -565,6 +666,85 @@
              It contains properties representing the user's Id, Username, Password, and Email
              It is used by the MembershipController class
             </summary>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Repository.DiscountRepository">
+            <summary>
+             The DiscountRepository class implements the IDiscountRepository interface.
+             It is used to interact with the Discount table of the database.
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.DiscountRepository.#ctor(MembershipManagementMicroservice.Infrastructure.CassandraConfig)">
+            <summary>
+             This constructor is used to inject the CassandraConfig into the DiscountRepository class.
+            </summary>
+            <param name="cassandraConfig">
+            The cassandraConfig argument represents the CassandraConfig dependency used to configure the Cassandra database
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.DiscountRepository.CreateDiscountAsync(MembershipManagementMicroservice.Models.Discount)">
+            <summary>
+             This method is used to create a discount in the database.
+            </summary>
+            <param name="discount">
+            The discount argument represents the discount to be created in the database 
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.DiscountRepository.GetDiscountByIdAsync(System.String)">
+            <summary>
+             This method is used to get a discount from the database by id.
+            </summary>
+            <param name="discountId">
+            The discountId argument represents the id of the discount to be retrieved from the database
+            </param>
+            <returns>
+            The method returns a Discount object if the discount is found in the database, otherwise it returns null
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.DiscountRepository.GetDiscountByUserIdAsync(System.String)">
+            <summary>
+             This method is used to get a discount from the database by user_id.
+            </summary>
+            <param name="userId">
+            The userId argument represents the user_id of the discount to be retrieved from the database
+            </param>
+            <returns>
+            The method returns a Discount object if the discount is found in the database, otherwise it returns null
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.DiscountRepository.UpdateDiscountAsync(MembershipManagementMicroservice.Models.Discount)">
+            <summary>
+             This method is used to update a discount in the database.
+            </summary>
+            <param name="discount">
+            The discount argument represents the discount to be updated in the database
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.DiscountRepository.DeleteDiscountByIdAsync(System.String)">
+            <summary>
+             This method is used to delete a discount from the database by id.
+            </summary>
+            <param name="discountId">
+            The discountId argument represents the id of the discount to be deleted from the database
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.DiscountRepository.DeleteDiscountByUserIdAsync(System.String)">
+            <summary>
+             This method is used to delete a discount from the database by user_id.
+            </summary>
+            <param name="userId">
+            The userId argument represents the user_id of the discount to be deleted from the database
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.DiscountRepository.GetAllDiscountsByUserIdAsync(System.String)">
+            <summary>
+             This method is used to get all discounts from the database that are for some user.
+            </summary>
+            <param name="userId">
+            The userId argument represents the user_id of the discounts to be retrieved from the database
+            </param>
+            <returns>
+            The method returns a list of Discount objects if the discounts are found in the database, otherwise it returns an empty list
+            </returns>
         </member>
         <member name="T:MembershipManagementMicroservice.Repository.Interfaces.IMembershipRepository">
             <summary>
@@ -631,6 +811,74 @@
             <param name="membership">
             The membership argument represents the membership to be edited in the database 
             </param>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Repository.MembershipTypesRepository">
+            <summary>
+             This class is used to interact with the MembershipTypes table of the database.
+             It implements the IMembershipTypesRepository interface.
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.MembershipTypesRepository.#ctor(MembershipManagementMicroservice.Infrastructure.CassandraConfig)">
+            <summary>
+             This constructor is used to inject the CassandraConfig into the MembershipTypesRepository class.
+            </summary>
+            <param name="cassandraConfig">
+            The cassandraConfig argument represents the CassandraConfig dependency used to configure the Cassandra database
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.MembershipTypesRepository.CreateMembershipTypeAsync(MembershipManagementMicroservice.Models.MembershipType)">
+            <summary>
+             This method is used to create a membership type in the database.
+            </summary>
+            <param name="membershipType">
+            The membershipType argument represents the membership type to be created in the database
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.MembershipTypesRepository.GetMembershipTypeAsync(System.String)">
+            <summary>
+             This method is used to get a membership type from the database by id.
+            </summary>
+            <param name="membershipTypeId">
+            The membershipTypeId argument represents the id of the membership type to be retrieved from the database
+            </param>
+            <returns>
+            The method returns a MembershipType object if the membership type is found in the database, otherwise it returns null
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.MembershipTypesRepository.GetALLMembershipTypesAsync">
+            <summary>
+             This method is used to get all membership types from the database.
+            </summary>
+            <returns>
+            The method returns a list of MembershipType objects if membership types are found in the database, otherwise it returns null
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.MembershipTypesRepository.UpdateMembershipTypeAsync(MembershipManagementMicroservice.Models.MembershipType)">
+            <summary>
+             This method is used to update a membership type in the database.
+            </summary>
+            <param name="membershipType">
+            The membershipType argument represents the membership type to be updated in the database
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.MembershipTypesRepository.DeleteMembershipTypeAsync(System.String)">
+            <summary>
+             This method is used to delete a membership type from the database by type id.
+            </summary>
+            <param name="membershipTypeId">
+            The membershipTypeId argument represents the id of the membership type to be deleted from the database
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Repository.MembershipTypesRepository.GetMembershipTypeByNameAsync(System.String)">
+            <summary>
+             This method is used to get a membership type from the database by name.
+            </summary>
+            <param name="membershipTypeName">
+            The membershipTypeName argument represents the name of the membership type to be retrieved from the database
+            </param>
+            <returns>
+             The method returns a MembershipType object if the membership type is found in the database, otherwise it returns null
+            </returns>
         </member>
         <member name="T:MembershipManagementMicroservice.Repository.RegistrationRepository">
             <summary>
@@ -727,11 +975,107 @@
             The method returns a string message if the user is edited successfully
             </returns>
         </member>
+        <member name="T:MembershipManagementMicroservice.Services.DiscountService">
+            <summary>
+                This class implements the IDiscountService interface.
+              It is used to interact with the Discount table of the database.
+             It contains methods for creating a discount, getting a discount by id, getting a discount by user id, editing a discount, and deleting a discount.
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.DiscountService.#ctor(MembershipManagementMicroservice.Repository.Interfaces.IDiscountRepository,MembershipManagementMicroservice.Kafka.IKafkaConsumerService,Microsoft.Extensions.Logging.ILogger{MembershipManagementMicroservice.Services.MembershipService},MembershipManagementMicroservice.Services.Interfaces.IRegistrationService)">
+            <summary>
+             The constructor of the DiscountService class.
+            </summary>
+            <param name="discountRepository">
+            A IDiscountRepository interface that is used to interact with the Discount table of the database.
+            </param>
+            <param name="kafkaConsumerService">
+            A IKafkaConsumerService interface that is used to consume messages from a Kafka topic.
+            </param>
+            <param name="logger">
+            A ILogger interface that is used to log information to the console.
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.DiscountService.CreateDiscountAsync">
+            <summary>
+             This method is used to create a discount.
+             It consumes a message from a Kafka topic and creates a discount.
+             Check if the user exists. 
+            </summary>
+            <returns>
+            A string that says whether the discount was created or not.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.DiscountService.GetDiscountByIdAsync(System.String)">
+            <summary>
+             This method is used to get a discount by id.
+            </summary>
+            <param name="discountId">
+            The discountId argument represents the id of the discount to be retrieved from the database
+            </param>
+            <returns>
+            A string that contains the discount object in JSON format.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.DiscountService.GetDiscountByUserIdAsync(System.String)">
+            <summary>
+             This method is used to get a discount by user id.
+            </summary>
+            <param name="userId">
+            The userId argument represents the id of the user whose discount is to be retrieved from the database
+            </param>
+            <returns>
+            A string that contains the discount object in JSON format.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.DiscountService.UpdateDiscountAsync(MembershipManagementMicroservice.Models.Discount)">
+            <summary>
+             This method is used to update a discount.
+            </summary>
+            <param name="discount">
+            The discount argument represents the discount object to be updated in the database
+            </param>
+            <returns>
+            A string that says whether the discount was updated or not.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.DiscountService.DeleteDiscountByIdAsync(System.String)">
+            <summary>
+             This method is used to delete a discount by id.
+            </summary>
+            <param name="discountId">
+            The discountId argument represents the id of the discount to be deleted from the database
+            </param>
+            <returns>
+            A string that says whether the discount was deleted or not.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.DiscountService.GetAllDiscountsByUserIdAsync(System.String)">
+            <summary>
+             This method is used to get all  discounts by user id.
+            </summary>
+            <param name="userId">
+            The userId argument represents the id of the user whose discounts are to be retrieved from the database
+            </param>
+            <returns>
+            A string that contains the discount objects in JSON format.
+            </returns>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Services.Interfaces.IDiscountService">
+            <summary>
+             This interface is used to interact with the Discount table of the database.
+            </summary>
+        </member>
         <member name="T:MembershipManagementMicroservice.Services.Interfaces.IMembershipService">
             <summary>
              This interface is used to interact with the Membership table of the database.
              It is implemented by the MembershipService class.
              It contains methods for creating a membership, getting a membership by id, getting all memberships with a given user id, and editing a membership.
+            </summary>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Services.Interfaces.IMembershipTypesService">
+            <summary>
+             This interface is used to interact with the MembershipType table of the database.
             </summary>
         </member>
         <member name="T:MembershipManagementMicroservice.Services.Interfaces.IRegistrationService">
@@ -807,6 +1151,71 @@
             </param>
             <returns>
             A Membership object that was edited.
+            </returns>
+        </member>
+        <member name="T:MembershipManagementMicroservice.Services.MembershipTypesService">
+            <summary>
+             This class implements the IMembershipTypesService interface.
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.MembershipTypesService.CreateMembershipTypeAsync">
+            <summary>
+             This method is used to create a membership type.
+            </summary>
+            <returns>
+            A string that says whether the membership type was created or not.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.MembershipTypesService.GetByIdMembershipTypeAsync(System.String)">
+            <summary>
+             This method is used to get a membership type by id.
+            </summary>
+            <param name="membershipTypeId">
+            A string that represents the id of the membership type.
+            </param>
+            <returns>
+            A membership type object.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.MembershipTypesService.GetByNameMembershipTypeAsync(System.String)">
+            <summary>
+             This method is used to get a membership type by name.
+            </summary>
+            <param name="membershipTypeName">
+            A string that represents the name of the membership type.
+            </param>
+            <returns>
+            A membership type object.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.MembershipTypesService.GetAllMembershipTypesAsync">
+            <summary>
+             This method is used to get all membership types.
+            </summary>
+            <returns>
+            A list of membership types.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.MembershipTypesService.UpdateMembershipTypeAsync(MembershipManagementMicroservice.Models.MembershipType)">
+            <summary>
+             This method is used to update a membership type.
+            </summary>
+            <param name="membershipType">
+            A membership type object.
+            </param>
+            <returns>
+            A string that says whether the membership type was updated or not.
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Services.MembershipTypesService.DeleteMembershipTypeAsync(System.String)">
+            <summary>
+             This method is used to delete a membership type.
+            </summary>
+            <param name="membershipTypeId">
+            A string that represents the id of the membership type.
+            </param>
+            <returns>
+            A string that says whether the membership type was deleted or not.
             </returns>
         </member>
         <member name="T:MembershipManagementMicroservice.Services.RegistrationService">

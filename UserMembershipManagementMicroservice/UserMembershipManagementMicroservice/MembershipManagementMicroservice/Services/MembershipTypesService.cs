@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 
 namespace MembershipManagementMicroservice.Services;
 
+/// <summary>
+///  This class implements the IMembershipTypesService interface.
+/// </summary>
 public class MembershipTypesService : IMembershipTypesService
 {
     private readonly IMembershipTypesRepository _membershipTypesRepository;
@@ -20,11 +23,17 @@ public class MembershipTypesService : IMembershipTypesService
         _logger = logger;
     }
     
+    /// <summary>
+    ///  This method is used to create a membership type.
+    /// </summary>
+    /// <returns>
+    /// A string that says whether the membership type was created or not.
+    /// </returns>
     public async Task<string> CreateMembershipTypeAsync()
     {
         _logger.LogInformation("Creating membership type unpacked...");
         // consume from kafka topic and create membership
-        var membershipTypeJson = await _kafkaConsumerService.ConsumeMessagesAsync("membership_type_get_topic");
+        var membershipTypeJson = await _kafkaConsumerService.ConsumeMessagesAsync("membership_type_post_topic");
         _logger.LogInformation($"Membership type JSON: {membershipTypeJson}");
 
         // unpack the membership object from the JSON string
@@ -36,6 +45,15 @@ public class MembershipTypesService : IMembershipTypesService
         return "Membership type created";
     }
     
+    /// <summary>
+    ///  This method is used to get a membership type by id.
+    /// </summary>
+    /// <param name="membershipTypeId">
+    /// A string that represents the id of the membership type.
+    /// </param>
+    /// <returns>
+    /// A membership type object.
+    /// </returns>
     public async Task<MembershipType> GetByIdMembershipTypeAsync(string membershipTypeId)
     {
         _logger.LogInformation("Getting membership type by id...");
@@ -43,6 +61,15 @@ public class MembershipTypesService : IMembershipTypesService
         return membershipType;
     }
     
+    /// <summary>
+    ///  This method is used to get a membership type by name.
+    /// </summary>
+    /// <param name="membershipTypeName">
+    /// A string that represents the name of the membership type.
+    /// </param>
+    /// <returns>
+    /// A membership type object.
+    /// </returns>
     public async Task<MembershipType?> GetByNameMembershipTypeAsync(string membershipTypeName)
     {
         _logger.LogInformation("Getting membership type by name...");
@@ -54,6 +81,12 @@ public class MembershipTypesService : IMembershipTypesService
         return membershipType;
     }
     
+    /// <summary>
+    ///  This method is used to get all membership types.
+    /// </summary>
+    /// <returns>
+    /// A list of membership types.
+    /// </returns>
     public async Task<List<MembershipType>> GetAllMembershipTypesAsync()
     {
         _logger.LogInformation("Getting all membership types...");
@@ -61,6 +94,15 @@ public class MembershipTypesService : IMembershipTypesService
         return membershipTypes;
     }
     
+    /// <summary>
+    ///  This method is used to update a membership type.
+    /// </summary>
+    /// <param name="membershipType">
+    /// A membership type object.
+    /// </param>
+    /// <returns>
+    /// A string that says whether the membership type was updated or not.
+    /// </returns>
     public async Task<string> UpdateMembershipTypeAsync(MembershipType membershipType)
     {
         _logger.LogInformation("Updating membership type...");
@@ -74,6 +116,15 @@ public class MembershipTypesService : IMembershipTypesService
         return "Membership type updated";
     }
     
+    /// <summary>
+    ///  This method is used to delete a membership type.
+    /// </summary>
+    /// <param name="membershipTypeId">
+    /// A string that represents the id of the membership type.
+    /// </param>
+    /// <returns>
+    /// A string that says whether the membership type was deleted or not.
+    /// </returns>
     public async Task<string> DeleteMembershipTypeAsync(string membershipTypeId)
     {
         _logger.LogInformation("Deleting membership type...");
