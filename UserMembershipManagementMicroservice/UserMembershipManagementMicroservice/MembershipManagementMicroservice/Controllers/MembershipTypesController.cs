@@ -48,6 +48,14 @@ public class MembershipTypesController  : ControllerBase
     /// <returns>
     /// An IActionResult response
     /// </returns>
+    ///  <example>
+    /// POST /api/membershiptypes
+    ///   {
+    ///     "name" : "Premium",
+    ///     "description" : "premium plan description",
+    ///     "price" : 799.99
+    /// }
+    /// </example>
     [HttpPost]
     public async Task<IActionResult> CreateMembershipTypeAsync(MembershipType membershipType)
     {
@@ -83,6 +91,9 @@ public class MembershipTypesController  : ControllerBase
     /// <returns>
     /// An IActionResult response that is represented by a string
     /// </returns>
+    ///  <example>
+    ///  GET /api/membershiptypes/id/1
+    ///  </example>
     [HttpGet("id/{membershipTypeId}")]
     public async Task<IActionResult> GetByIdMembershipTypeAsync(string membershipTypeId)
     {
@@ -111,6 +122,9 @@ public class MembershipTypesController  : ControllerBase
     /// <returns>
     /// An IActionResult response that is represented by a string
     /// </returns>
+    ///  <example>
+    ///  GET /api/membershiptypes/name/Premium
+    ///  </example>
     [HttpGet("name/{membershipTypeName}")]
     public async Task<IActionResult> GetByNameMembershipTypeAsync(string membershipTypeName)
     {
@@ -136,6 +150,9 @@ public class MembershipTypesController  : ControllerBase
     /// <returns>
     ///     An IActionResult response that is represented by a list of MembershipType objects
     /// </returns>
+    ///  <example>
+    ///  GET /api/membershiptypes
+    ///  </example>
     [HttpGet]
     public async Task<IActionResult> GetAllMembershipTypesAsync()
     {
@@ -164,6 +181,15 @@ public class MembershipTypesController  : ControllerBase
     /// <returns>
     /// An IActionResult response 
     /// </returns>
+    ///  <example>
+    ///  PUT /api/membershiptypes
+    ///  {
+    ///   "id" : "1",
+    ///  "name" : "Premium",
+    ///  "description" : "premium plan description",
+    ///  "price" : 799.99
+    ///  }
+    ///  </example>
     [HttpPut]
     public async Task<IActionResult> UpdateMembershipTypeAsync(MembershipType membershipType)
     {
@@ -192,6 +218,9 @@ public class MembershipTypesController  : ControllerBase
     /// <returns>
     /// An IActionResult response
     /// </returns>
+    ///  <example>
+    ///  DELETE /api/membershiptypes/1
+    ///  </example>
     [HttpDelete("{membershipTypeId}")]
     public async Task<IActionResult> DeleteMembershipTypeAsync(string membershipTypeId)
     {
