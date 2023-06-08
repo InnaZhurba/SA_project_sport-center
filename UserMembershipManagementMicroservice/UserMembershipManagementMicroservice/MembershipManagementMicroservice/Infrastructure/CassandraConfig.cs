@@ -79,9 +79,10 @@ public class CassandraConfig
     ///  var cassandraConfig = new CassandraConfig();
     ///  cassandraConfig.ExecuteQuery("INSERT INTO users (id, username, password, email) VALUES (uuid(), 'testuser', 'testpassword', 'testemail')");
     ///  </remarks>
-    public void ExecuteQuery(string query)
+    public async Task<RowSet> ExecuteQuery(string query)
     {
-        _session.Execute(query);
+       var statement = new SimpleStatement(query, null);
+         return await _session.ExecuteAsync(statement).ConfigureAwait(false);
     }
 
     /// <summary>

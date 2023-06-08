@@ -111,6 +111,89 @@
              }
              </remarks>
         </member>
+        <member name="T:MembershipManagementMicroservice.Controllers.MembershipTypesController">
+            <summary>
+             The MembershipTypesController class is a RESTful API controller class
+             It handles all HTTP requests to the /api/membershipTypes endpoint
+            </summary>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.MembershipTypesController.#ctor(MembershipManagementMicroservice.Services.Interfaces.IMembershipTypesService,MembershipManagementMicroservice.Kafka.IKafkaProducerService,Microsoft.Extensions.Logging.ILogger{MembershipManagementMicroservice.Controllers.MembershipTypesController})">
+            <summary>
+             The constructor accepts two services and a logger as arguments and assigns them to private fields
+            </summary>
+            <param name="membershipTypesService">
+            The membershipService argument represents the IMembershipTypesService interface
+            </param>
+            <param name="kafkaProducerService">
+            The kafkaProducerService argument represents the IKafkaProducerService interface
+            </param>
+            <param name="logger">
+            The logger argument represents the ILogger interface
+            </param>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.MembershipTypesController.CreateMembershipTypeAsync(MembershipManagementMicroservice.Models.MembershipType)">
+            <summary>
+             The CreateMembershipTypeAsync method accepts a MembershipType object as an argument and returns an IActionResult response
+            </summary>
+            <param name="membershipType">
+            The membershipType argument represents a MembershipType object
+            </param>
+            <returns>
+            An IActionResult response
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.MembershipTypesController.GetByIdMembershipTypeAsync(System.String)">
+            <summary>
+             The GetByIdMembershipTypeAsync method accepts a string as an argument and returns an IActionResult response
+            </summary>
+            <param name="membershipTypeId">
+            The membershipTypeId argument represents a string
+            </param>
+            <returns>
+            An IActionResult response that is represented by a string
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.MembershipTypesController.GetByNameMembershipTypeAsync(System.String)">
+            <summary>
+             The GetByNameMembershipTypeAsync method accepts a string as an argument and returns an IActionResult response
+            </summary>
+            <param name="membershipTypeName">
+            The membershipTypeName argument represents a string
+            </param>
+            <returns>
+            An IActionResult response that is represented by a string
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.MembershipTypesController.GetAllMembershipTypesAsync">
+            <summary>
+             The GetAllMembershipTypesAsync method that accepts no arguments and returns all MembershipType objects 
+            </summary>
+            <returns>
+                An IActionResult response that is represented by a list of MembershipType objects
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.MembershipTypesController.UpdateMembershipTypeAsync(MembershipManagementMicroservice.Models.MembershipType)">
+            <summary>
+             The UpdateMembershipTypeAsync method accepts a MembershipType object as an argument and returns an IActionResult response
+            </summary>
+            <param name="membershipType">
+            The membershipType argument represents a MembershipType object
+            </param>
+            <returns>
+            An IActionResult response 
+            </returns>
+        </member>
+        <member name="M:MembershipManagementMicroservice.Controllers.MembershipTypesController.DeleteMembershipTypeAsync(System.String)">
+            <summary>
+             The DeleteMembershipTypeAsync method accepts a string as an argument and returns an IActionResult response 
+            </summary>
+            <param name="membershipTypeId">
+            The membershipTypeId argument represents a string
+            </param>
+            <returns>
+            An IActionResult response
+            </returns>
+        </member>
         <member name="T:MembershipManagementMicroservice.Controllers.RegistrationController">
             <summary>
               The RegistrationController class
