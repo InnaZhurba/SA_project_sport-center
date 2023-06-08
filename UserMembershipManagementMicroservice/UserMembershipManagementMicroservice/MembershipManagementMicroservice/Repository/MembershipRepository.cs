@@ -33,12 +33,12 @@ public class MembershipRepository : IMembershipRepository
     {
         var user_id = Guid.Parse(membership.UserId);
         
-        string query = "INSERT INTO memberships (Id, User_id, Membership_type, is_active, Start_date, End_date) VALUES (?, ?, ?, ?, ?, ?)";
+        string query = "INSERT INTO memberships (Id, User_id, Membership_type_id, is_active, Start_date, End_date) VALUES (?, ?, ?, ?, ?, ?)";
         var result = await _cassandraConfig.ExecuteQuery(query, 
             membership.Id, 
             Guid.Parse(membership.UserId),
             //membership.UserId, 
-            membership.MembershipType, 
+            membership.MembershipTypeId, 
             membership.IsActive, 
             membership.StartDate, 
             membership.EndDate);
@@ -65,7 +65,7 @@ public class MembershipRepository : IMembershipRepository
             {
                 Id = row.GetValue<Guid>("id"),
                 UserId = row.GetValue<Guid>("user_id").ToString(),
-                MembershipType = row.GetValue<string>("membership_type"),
+                MembershipTypeId = row.GetValue<Guid>("membership_type_id"),
                 StartDate = row.GetValue<DateTime>("start_date"),
                 EndDate = row.GetValue<DateTime>("end_date"),
                 IsActive = row.GetValue<bool>("is_active")
@@ -94,7 +94,7 @@ public class MembershipRepository : IMembershipRepository
             {
                 Id = row.GetValue<Guid>("id"),
                 UserId = userId,
-                MembershipType = row.GetValue<string>("membership_type"),
+                MembershipTypeId = row.GetValue<Guid>("membership_type_id"),
                 StartDate = row.GetValue<DateTime>("start_date"),
                 EndDate = row.GetValue<DateTime>("end_date"),
                 IsActive = row.GetValue<bool>("is_active")
@@ -111,9 +111,9 @@ public class MembershipRepository : IMembershipRepository
     /// </param>
     public async Task EditMembershipAsync(Membership membership)
     {
-        string query = "UPDATE memberships SET Membership_type = ?, is_active = ?, Start_date = ?, End_date = ? WHERE Id = ?";
+        string query = "UPDATE memberships SET Membership_type_id = ?, is_active = ?, Start_date = ?, End_date = ? WHERE Id = ?";
         var result = await _cassandraConfig.ExecuteQuery(query, 
-            membership.MembershipType, 
+            membership.MembershipTypeId, 
             membership.IsActive, 
             membership.StartDate, 
             membership.EndDate,

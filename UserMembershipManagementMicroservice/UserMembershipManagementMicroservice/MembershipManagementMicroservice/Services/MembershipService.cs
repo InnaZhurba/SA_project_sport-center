@@ -18,6 +18,7 @@ public class MembershipService : IMembershipService
     private readonly ILogger<MembershipService> _logger;
     
     private readonly IRegistrationService _registrationService;
+    private readonly IMembershipTypesService _membershipTypesService;
 
     /// <summary>
     ///  The constructor of the MembershipService class.
@@ -34,12 +35,13 @@ public class MembershipService : IMembershipService
     /// <param name="registrationService">
     /// A IRegistrationService interface that is used to interact with the User table of the database.
     /// </param>
-    public MembershipService(IMembershipRepository membershipRepository, IKafkaConsumerService kafkaConsumerService, ILogger<MembershipService> logger, IRegistrationService registrationService)
+    public MembershipService(IMembershipRepository membershipRepository, IKafkaConsumerService kafkaConsumerService, ILogger<MembershipService> logger, IRegistrationService registrationService, IMembershipTypesService membershipTypesService)
     {
         _membershipRepository = membershipRepository;
         _kafkaConsumerService = kafkaConsumerService;
         _logger = logger;
         _registrationService = registrationService;
+        _membershipTypesService = membershipTypesService;
     }
 
     /// <summary>
@@ -58,18 +60,31 @@ public class MembershipService : IMembershipService
         // unpack the membership object from the JSON string
         var membership = JsonConvert.DeserializeObject<Membership>(membershipJson);
 
+        // ------
         //check if such membership exists
         var membershipByUserId = await _membershipRepository.GetMembershipsByUserIdAsync(membership.UserId);
         
         // check if in membershipByUserId exist membership with all the same properties
-        if (membershipByUserId.Any(membershipByUserIdItem => membershipByUserIdItem.MembershipType == membership.MembershipType 
+        if (membershipByUserId.Any(membershipByUserIdItem => membershipByUserIdItem.MembershipTypeId == membership.MembershipTypeId
                                                              && membershipByUserIdItem.IsActive == membership.IsActive 
                                                              && membershipByUserIdItem.UserId == membership.UserId
                                                              && membershipByUserIdItem.EndDate == membership.EndDate
                                                              && membershipByUserIdItem.StartDate == membership.StartDate))
         {
-            _logger.LogInformation($"Membership with the same properties already exist: {membership.MembershipType}, {membership.IsActive}");
+            _logger.LogInformation($"Membership with the same properties already exist: {membership.MembershipTypeId}, {membership.IsActive}");
             return "Membership with the same properties already exist";
+        }
+        
+        // ----
+        // check if membership type exists
+        var membershipType = await _membershipTypesService.GetByIdMembershipTypeAsync(membership.MembershipTypeId.ToString());
+        
+        // check if membership type exist
+        if (membershipType == null)
+        {
+            _logger.LogInformation($"Membership type with id: {membership.MembershipTypeId} does not exist");
+            _logger.LogInformation("Creating membership failed");
+            return "Creating membership failed - membership type does not exist.";
         }
 
         // generate id for membership
@@ -125,7 +140,7 @@ public class MembershipService : IMembershipService
         try
         {
             var membership = await _membershipRepository.GetMembershipAsync(membershipId);
-            _logger.LogInformation($"Membership retrieved: {membership.MembershipType}, {membership.IsActive}, {membership.UserId}");
+            _logger.LogInformation($"Membership retrieved: {membership.MembershipTypeId}, {membership.IsActive}, {membership.UserId}");
             return membership;
         }
         catch (Exception ex)
@@ -183,7 +198,7 @@ public class MembershipService : IMembershipService
                 _logger.LogInformation($"Membership with id: {membershipId} does not exist");
                 return null;
             }
-            membershipToEdit.MembershipType = membership.MembershipType;
+            membershipToEdit.MembershipTypeId = membership.MembershipTypeId;
             membershipToEdit.IsActive = membership.IsActive;
             membershipToEdit.UserId = membership.UserId;
             await _membershipRepository.EditMembershipAsync(membershipToEdit);
