@@ -36,6 +36,12 @@ public class MembershipService : IMembershipService
     /// <param name="registrationService">
     /// A IRegistrationService interface that is used to interact with the User table of the database.
     /// </param>
+    ///  <param name="membershipTypesService">
+    ///  A IMembershipTypesService interface that is used to interact with the MembershipType table of the database.
+    ///  </param>
+    ///  <param name="discountService">
+    ///  A IDiscountService interface that is used to interact with the Discount table of the database.
+    ///  </param>
     public MembershipService(IMembershipRepository membershipRepository, IKafkaConsumerService kafkaConsumerService, ILogger<MembershipService> logger, IRegistrationService registrationService, IMembershipTypesService membershipTypesService, IDiscountService discountService)
     {
         _membershipRepository = membershipRepository;
@@ -48,6 +54,11 @@ public class MembershipService : IMembershipService
 
     /// <summary>
     ///  This method is used to create a membership.
+    ///  It consumes a message from a Kafka topic and creates a membership.
+    ///  Check if the user exists.
+    ///  Check if the membership type exists.
+    ///  Check if the discount exists.
+    ///  Calculate the price of the membership.
     /// </summary>
     /// <returns>
     /// A string that says whether the membership was created or not.
