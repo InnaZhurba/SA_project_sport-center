@@ -12,5 +12,6 @@ public class Membership
     public Guid MembershipTypeId { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } // active is mean that it is paid
+    public decimal Price { get; set; }
 }

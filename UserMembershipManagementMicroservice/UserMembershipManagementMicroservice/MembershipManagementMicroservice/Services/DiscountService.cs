@@ -90,16 +90,20 @@ public class DiscountService : IDiscountService
     /// <returns>
     /// A string that contains the discount object in JSON format.
     /// </returns>
-    public async Task<string> GetDiscountByIdAsync(string discountId)
+    public async Task<Discount?> GetDiscountByIdAsync(string discountId)
     {
        try {
             _logger.LogInformation("Getting discount...");
             var discount = await _discountRepository.GetDiscountByIdAsync(discountId);
+            if(discount == null) {
+                _logger.LogInformation($"Discount with id {discountId} does not exist!");
+                return null;
+            }
             _logger.LogInformation("Discount retrieved successfully!");
-            return JsonConvert.SerializeObject(discount);
+            return discount;
         } catch (Exception e) {
             _logger.LogInformation($"Error getting discount: {e.Message}");
-            return $"Error getting discount: {e.Message}";
+            return null;
         }
     }
     
@@ -112,16 +116,20 @@ public class DiscountService : IDiscountService
     /// <returns>
     /// A string that contains the discount object in JSON format.
     /// </returns>
-    public async Task<string> GetDiscountByUserIdAsync(string userId)
+    public async Task<Discount?> GetDiscountByUserIdAsync(string userId)
     {
-       try {
+        try {
             _logger.LogInformation("Getting discount...");
             var discount = await _discountRepository.GetDiscountByUserIdAsync(userId);
+            if(discount == null) {
+                _logger.LogInformation($"Discount with user id {userId} does not exist!");
+                return null;
+            }
             _logger.LogInformation("Discount retrieved successfully!");
-            return JsonConvert.SerializeObject(discount);
+            return discount;
         } catch (Exception e) {
             _logger.LogInformation($"Error getting discount: {e.Message}");
-            return $"Error getting discount: {e.Message}";
+            return null;
         }
     }
     
@@ -168,7 +176,7 @@ public class DiscountService : IDiscountService
             return $"Error deleting discount: {e.Message}";
         }
     }
-    
+
     /// <summary>
     ///  This method is used to get all  discounts by user id.
     /// </summary>
@@ -178,16 +186,25 @@ public class DiscountService : IDiscountService
     /// <returns>
     /// A string that contains the discount objects in JSON format.
     /// </returns>
-    public async Task<string> GetAllDiscountsByUserIdAsync(string userId)
+    public async Task<List<Discount?>> GetAllDiscountsByUserIdAsync(string userId)
     {
-        try {
-            _logger.LogInformation("Getting all active discounts...");
+        try
+        {
+            _logger.LogInformation("Getting discounts...");
             var discounts = await _discountRepository.GetAllDiscountsByUserIdAsync(userId);
+            if (discounts == null)
+            {
+                _logger.LogInformation($"Discounts with user id {userId} do not exist!");
+                return null;
+            }
+
             _logger.LogInformation("Discounts retrieved successfully!");
-            return JsonConvert.SerializeObject(discounts);
-        } catch (Exception e) {
+            return discounts;
+        }
+        catch (Exception e)
+        {
             _logger.LogInformation($"Error getting discounts: {e.Message}");
-            return $"Error getting discounts: {e.Message}";
+            return null;
         }
     }
 }

@@ -8,9 +8,9 @@ namespace MembershipManagementMicroservice.Services.Interfaces;
 public interface IDiscountService
 {
     Task<string> CreateDiscountAsync();
-    Task<string> GetDiscountByIdAsync(string discountId);
-    Task<string> GetDiscountByUserIdAsync(string userId);
+    Task<Discount?> GetDiscountByIdAsync(string discountId);
+    Task<Discount?> GetDiscountByUserIdAsync(string userId);
     Task<string> UpdateDiscountAsync(Discount discount);
     Task<string> DeleteDiscountByIdAsync(string discountId);
-    Task<string> GetAllDiscountsByUserIdAsync(string userId);
+    Task<List<Discount?>> GetAllDiscountsByUserIdAsync(string userId);
 }

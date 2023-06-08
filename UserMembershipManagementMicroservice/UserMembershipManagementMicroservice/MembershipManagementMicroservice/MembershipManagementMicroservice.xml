@@ -1155,7 +1155,7 @@
              It contains methods for creating a membership, getting a membership by id, getting all memberships with a given user id, and editing a membership.
             </summary>
         </member>
-        <member name="M:MembershipManagementMicroservice.Services.MembershipService.#ctor(MembershipManagementMicroservice.Repository.Interfaces.IMembershipRepository,MembershipManagementMicroservice.Kafka.IKafkaConsumerService,Microsoft.Extensions.Logging.ILogger{MembershipManagementMicroservice.Services.MembershipService},MembershipManagementMicroservice.Services.Interfaces.IRegistrationService,MembershipManagementMicroservice.Services.Interfaces.IMembershipTypesService)">
+        <member name="M:MembershipManagementMicroservice.Services.MembershipService.#ctor(MembershipManagementMicroservice.Repository.Interfaces.IMembershipRepository,MembershipManagementMicroservice.Kafka.IKafkaConsumerService,Microsoft.Extensions.Logging.ILogger{MembershipManagementMicroservice.Services.MembershipService},MembershipManagementMicroservice.Services.Interfaces.IRegistrationService,MembershipManagementMicroservice.Services.Interfaces.IMembershipTypesService,MembershipManagementMicroservice.Services.Interfaces.IDiscountService)">
             <summary>
              The constructor of the MembershipService class.
             </summary>

@@ -19,6 +19,7 @@ public class MembershipService : IMembershipService
     
     private readonly IRegistrationService _registrationService;
     private readonly IMembershipTypesService _membershipTypesService;
+    private readonly IDiscountService _discountService;
 
     /// <summary>
     ///  The constructor of the MembershipService class.
@@ -35,13 +36,14 @@ public class MembershipService : IMembershipService
     /// <param name="registrationService">
     /// A IRegistrationService interface that is used to interact with the User table of the database.
     /// </param>
-    public MembershipService(IMembershipRepository membershipRepository, IKafkaConsumerService kafkaConsumerService, ILogger<MembershipService> logger, IRegistrationService registrationService, IMembershipTypesService membershipTypesService)
+    public MembershipService(IMembershipRepository membershipRepository, IKafkaConsumerService kafkaConsumerService, ILogger<MembershipService> logger, IRegistrationService registrationService, IMembershipTypesService membershipTypesService, IDiscountService discountService)
     {
         _membershipRepository = membershipRepository;
         _kafkaConsumerService = kafkaConsumerService;
         _logger = logger;
         _registrationService = registrationService;
         _membershipTypesService = membershipTypesService;
+        _discountService = discountService;
     }
 
     /// <summary>
@@ -59,7 +61,7 @@ public class MembershipService : IMembershipService
 
         // unpack the membership object from the JSON string
         var membership = JsonConvert.DeserializeObject<Membership>(membershipJson);
-
+        
         // ------
         //check if such membership exists
         var membershipByUserId = await _membershipRepository.GetMembershipsByUserIdAsync(membership.UserId);
@@ -100,6 +102,7 @@ public class MembershipService : IMembershipService
         
         _logger.LogInformation($"Membership: {membership}");
 
+        // ----
         // get user by id
         var user = await _registrationService.GetUserAsync(membership.UserId);
         
@@ -110,7 +113,26 @@ public class MembershipService : IMembershipService
             _logger.LogInformation("Creating membership failed");
             return "Creating membership failed - user does not exist.";
         }
-
+        
+        // ----
+        // check if user has discount
+        var discount = await _discountService.GetDiscountByUserIdAsync(user.Id.ToString());
+        decimal user_discount = 0;
+        
+        // check if discount exist
+        if (discount != null)
+        {
+            // check if discount is active and not expired
+            if (discount.IsActive && discount.EndDate > DateTime.Now)
+            {
+                user_discount = discount.Percentage;
+            }
+        }
+        
+        // ----
+        var real_price = membershipType.Price - (membershipType.Price * user_discount / 100);
+        membership.Price = real_price;
+        
         // Example implementation:
         try
         {
@@ -140,6 +162,26 @@ public class MembershipService : IMembershipService
         try
         {
             var membership = await _membershipRepository.GetMembershipAsync(membershipId);
+            
+            if (membership == null)
+            {
+                _logger.LogInformation($"Membership with id: {membershipId} does not exist");
+                return null;
+            }
+            
+            var membershipType = await _membershipTypesService.GetByIdMembershipTypeAsync(membership.MembershipTypeId.ToString());
+            var user_discount = await _discountService.GetDiscountByUserIdAsync(membership.UserId);
+            
+            if (user_discount == null)
+            {
+                user_discount = new Discount();
+                user_discount.Percentage = 0;
+            }
+            
+            decimal real_price = membershipType.Price - (membershipType.Price * user_discount.Percentage / 100);
+            
+            membership.Price = real_price;
+            
             _logger.LogInformation($"Membership retrieved: {membership.MembershipTypeId}, {membership.IsActive}, {membership.UserId}");
             return membership;
         }
@@ -164,6 +206,23 @@ public class MembershipService : IMembershipService
         try
         {
             var memberships = await _membershipRepository.GetMembershipsByUserIdAsync(userId);
+
+            foreach (var membership in memberships)
+            {
+                var membershipType = await _membershipTypesService.GetByIdMembershipTypeAsync(membership.MembershipTypeId.ToString());
+                var user_discount = await _discountService.GetDiscountByUserIdAsync(membership.UserId);
+                
+                if (user_discount == null)
+                {
+                    user_discount = new Discount();
+                    user_discount.Percentage = 0;
+                }
+
+                decimal real_price = membershipType.Price - (membershipType.Price * user_discount.Percentage / 100);
+            
+                membership.Price = real_price;
+            }
+            
             _logger.LogInformation($"Memberships retrieved: {memberships}");
             return memberships;
         }
@@ -201,6 +260,21 @@ public class MembershipService : IMembershipService
             membershipToEdit.MembershipTypeId = membership.MembershipTypeId;
             membershipToEdit.IsActive = membership.IsActive;
             membershipToEdit.UserId = membership.UserId;
+            
+            var membershipType = await _membershipTypesService.GetByIdMembershipTypeAsync(membershipToEdit.MembershipTypeId.ToString());
+            var user_discount = await _discountService.GetDiscountByUserIdAsync(membershipToEdit.UserId);
+            
+            if (user_discount == null)
+            {
+                user_discount = new Discount();
+                user_discount.Percentage = 0;
+            }
+
+            
+            decimal real_price = membershipType.Price - (membershipType.Price * user_discount.Percentage / 100);
+            
+            membershipToEdit.Price = real_price;
+            
             await _membershipRepository.EditMembershipAsync(membershipToEdit);
             _logger.LogInformation($"Membership edited: {membershipToEdit}");
             return membershipToEdit;
