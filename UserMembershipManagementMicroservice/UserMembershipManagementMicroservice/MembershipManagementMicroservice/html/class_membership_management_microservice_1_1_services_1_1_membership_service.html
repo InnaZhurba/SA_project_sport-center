@@ -94,9 +94,9 @@ Inheritance diagram for MembershipManagementMicroservice.Services.MembershipServ
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa0fcc06ec9d71207bf61b519a2364cc6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membership_management_microservice_1_1_services_1_1_membership_service.html#aa0fcc06ec9d71207bf61b519a2364cc6">MembershipService</a> (<a class="el" href="interface_membership_management_microservice_1_1_repository_1_1_interfaces_1_1_i_membership_repository.html">IMembershipRepository</a> membershipRepository, <a class="el" href="interface_membership_management_microservice_1_1_kafka_1_1_i_kafka_consumer_service.html">IKafkaConsumerService</a> kafkaConsumerService, ILogger&lt; <a class="el" href="class_membership_management_microservice_1_1_services_1_1_membership_service.html">MembershipService</a> &gt; logger, <a class="el" href="interface_membership_management_microservice_1_1_services_1_1_interfaces_1_1_i_registration_service.html">IRegistrationService</a> registrationService)</td></tr>
-<tr class="memdesc:aa0fcc06ec9d71207bf61b519a2364cc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The constructor of the MembershipService class.  <br /></td></tr>
-<tr class="separator:aa0fcc06ec9d71207bf61b519a2364cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a007411113cdd390a3596c6dcbd0c926d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membership_management_microservice_1_1_services_1_1_membership_service.html#a007411113cdd390a3596c6dcbd0c926d">MembershipService</a> (<a class="el" href="interface_membership_management_microservice_1_1_repository_1_1_interfaces_1_1_i_membership_repository.html">IMembershipRepository</a> membershipRepository, <a class="el" href="interface_membership_management_microservice_1_1_kafka_1_1_i_kafka_consumer_service.html">IKafkaConsumerService</a> kafkaConsumerService, ILogger&lt; <a class="el" href="class_membership_management_microservice_1_1_services_1_1_membership_service.html">MembershipService</a> &gt; logger, <a class="el" href="interface_membership_management_microservice_1_1_services_1_1_interfaces_1_1_i_registration_service.html">IRegistrationService</a> registrationService, <a class="el" href="interface_membership_management_microservice_1_1_services_1_1_interfaces_1_1_i_membership_types_service.html">IMembershipTypesService</a> membershipTypesService)</td></tr>
+<tr class="memdesc:a007411113cdd390a3596c6dcbd0c926d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The constructor of the MembershipService class.  <br /></td></tr>
+<tr class="separator:a007411113cdd390a3596c6dcbd0c926d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30a116e9ad9565845ccaac0154fe5e5a"><td class="memItemLeft" align="right" valign="top">async Task&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_membership_management_microservice_1_1_services_1_1_membership_service.html#a30a116e9ad9565845ccaac0154fe5e5a">CreateMembershipAsync</a> ()</td></tr>
 <tr class="memdesc:a30a116e9ad9565845ccaac0154fe5e5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is used to create a membership.  <br /></td></tr>
 <tr class="separator:a30a116e9ad9565845ccaac0154fe5e5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,8 +121,8 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class implements the IMembershipService interface. It is used to interact with the Membership table of the database. It contains methods for creating a membership, getting a membership by id, getting all memberships with a given user id, and editing a membership. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aa0fcc06ec9d71207bf61b519a2364cc6" name="aa0fcc06ec9d71207bf61b519a2364cc6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0fcc06ec9d71207bf61b519a2364cc6">&#9670;&#160;</a></span>MembershipService()</h2>
+<a id="a007411113cdd390a3596c6dcbd0c926d" name="a007411113cdd390a3596c6dcbd0c926d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a007411113cdd390a3596c6dcbd0c926d">&#9670;&#160;</a></span>MembershipService()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -152,7 +152,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="interface_membership_management_microservice_1_1_services_1_1_interfaces_1_1_i_registration_service.html">IRegistrationService</a>&#160;</td>
-          <td class="paramname"><em>registrationService</em>&#160;</td>
+          <td class="paramname"><em>registrationService</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interface_membership_management_microservice_1_1_services_1_1_interfaces_1_1_i_membership_types_service.html">IMembershipTypesService</a>&#160;</td>
+          <td class="paramname"><em>membershipTypesService</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
