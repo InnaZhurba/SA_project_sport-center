@@ -73,12 +73,15 @@ public class MembershipTypesController  : ControllerBase
             //var membershipTypeCreated = await _membershipTypesService.CreateMembershipTypeAsync(membershipType);
             _logger.LogInformation("MembershipType created successfully"); 
             
-            return Ok(result2.Result);
+            return Ok(JsonConvert.SerializeObject(result2.Result));
+            
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return StatusCode(500, "An error occurred while sending the membership creation request."); //new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            
+            //return StatusCode(500, "An error occurred while sending the membership creation request."); //new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return StatusCode(500, JsonConvert.SerializeObject(e.Message));
         }
     }
     
@@ -104,12 +107,14 @@ public class MembershipTypesController  : ControllerBase
             {
                 return StatusCode(404, "MembershipType by id not found.");
             }
-            return new OkObjectResult(membershipType);
+            //return new OkObjectResult(membershipType);
+            return Ok(JsonConvert.SerializeObject(membershipType));
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return StatusCode(500, "An error occurred while sending the membership get by id request.");
+            //return StatusCode(500, "An error occurred while sending the membership get by id request.");
+            return StatusCode(500, JsonConvert.SerializeObject(e.Message));
         }
     }
     
@@ -135,12 +140,14 @@ public class MembershipTypesController  : ControllerBase
             {
                 return new StatusCodeResult(StatusCodes.Status404NotFound);
             }
-            return new OkObjectResult(membershipType);
+            //return new OkObjectResult(membershipType);
+            return Ok(JsonConvert.SerializeObject(membershipType));
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            //return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return StatusCode(500, JsonConvert.SerializeObject(e.Message));
         }
     }
     
@@ -163,12 +170,14 @@ public class MembershipTypesController  : ControllerBase
             {
                 return new StatusCodeResult(StatusCodes.Status404NotFound);
             }
-            return new OkObjectResult(membershipTypes);
+            //return new OkObjectResult(membershipTypes);
+            return Ok(JsonConvert.SerializeObject(membershipTypes));
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            //return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return StatusCode(500, JsonConvert.SerializeObject(e.Message));
         }
     }
     
@@ -200,12 +209,14 @@ public class MembershipTypesController  : ControllerBase
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-            return new OkObjectResult(membershipTypeUpdated);
+            //return new OkObjectResult(membershipTypeUpdated);
+            return Ok(JsonConvert.SerializeObject(membershipTypeUpdated));
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+           // return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+              return StatusCode(500, JsonConvert.SerializeObject(e.Message));
         }
     }
     
@@ -231,12 +242,14 @@ public class MembershipTypesController  : ControllerBase
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-            return new OkObjectResult(membershipTypeDeleted);
+            //return new OkObjectResult(membershipTypeDeleted);
+            return Ok(JsonConvert.SerializeObject(membershipTypeDeleted));
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            //return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return StatusCode(500, JsonConvert.SerializeObject(e.Message));
         }
     }
     

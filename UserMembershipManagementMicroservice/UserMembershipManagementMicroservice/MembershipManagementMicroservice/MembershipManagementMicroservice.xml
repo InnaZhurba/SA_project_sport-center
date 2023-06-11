@@ -1171,10 +1171,21 @@
             <param name="registrationService">
             A IRegistrationService interface that is used to interact with the User table of the database.
             </param>
+             <param name="membershipTypesService">
+             A IMembershipTypesService interface that is used to interact with the MembershipType table of the database.
+             </param>
+             <param name="discountService">
+             A IDiscountService interface that is used to interact with the Discount table of the database.
+             </param>
         </member>
         <member name="M:MembershipManagementMicroservice.Services.MembershipService.CreateMembershipAsync">
             <summary>
              This method is used to create a membership.
+             It consumes a message from a Kafka topic and creates a membership.
+             Check if the user exists.
+             Check if the membership type exists.
+             Check if the discount exists.
+             Calculate the price of the membership.
             </summary>
             <returns>
             A string that says whether the membership was created or not.

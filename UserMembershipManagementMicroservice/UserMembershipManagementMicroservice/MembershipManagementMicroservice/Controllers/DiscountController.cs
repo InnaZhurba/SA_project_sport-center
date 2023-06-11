@@ -75,12 +75,15 @@ public class DiscountController : ControllerBase
             
             Task.WhenAll(result1, result2).GetAwaiter().GetResult();
             
-            return Ok(result2.Result);
+            //return Ok(result2.Result);
+            //JSON 
+            return Ok(JsonConvert.SerializeObject(result2.Result));
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return StatusCode( StatusCodes.Status500InternalServerError, e.Message);
+            //return StatusCode( StatusCodes.Status500InternalServerError, e.Message);
+            return StatusCode( StatusCodes.Status500InternalServerError, JsonConvert.SerializeObject(e.Message));
         }
     }
     
@@ -103,12 +106,16 @@ public class DiscountController : ControllerBase
         {
             var result = Task.Run(() => _discountService.GetDiscountByIdAsync(discountId));
             _logger.LogInformation("Discount retrieved.");
-            return (result.Result != null) ? Ok(result.Result) : NotFound("Discount not found.");
+            //return (result.Result != null) ? Ok(result.Result) : NotFound("Discount not found.");
+            //JSON
+            return (result.Result != null) ? Ok(JsonConvert.SerializeObject(result.Result)) : NotFound("Discount not found.");
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            //return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            //JSON
+            return StatusCode(StatusCodes.Status500InternalServerError, JsonConvert.SerializeObject(e.Message));
         }
     }
     
@@ -131,12 +138,16 @@ public class DiscountController : ControllerBase
         {
             var result = Task.Run(() => _discountService.GetDiscountByUserIdAsync(userId));
             _logger.LogInformation("Discount retrieved.");
-            return (result.Result != null) ? Ok(result.Result) : NotFound("Discount not found.");
+            //return (result.Result != null) ? Ok(result.Result) : NotFound("Discount not found.");
+            //JSON
+            return (result.Result != null) ? Ok(JsonConvert.SerializeObject(result.Result)) : NotFound("Discount not found.");
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return StatusCode( StatusCodes.Status500InternalServerError, e.Message);
+            //return StatusCode( StatusCodes.Status500InternalServerError, e.Message);
+            //JSON
+            return StatusCode( StatusCodes.Status500InternalServerError, JsonConvert.SerializeObject(e.Message));
         }
     }
     
@@ -169,12 +180,16 @@ public class DiscountController : ControllerBase
            var result = _discountService.UpdateDiscountAsync(discount);
               _logger.LogInformation("Discount updated.");
               
-              return Ok(result.Result);
+              //return Ok(result.Result);
+                //JSON
+                return Ok(JsonConvert.SerializeObject(result.Result));
        }
        catch (Exception e)
        {
            _logger.LogError(e.Message);
-           return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+           //return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+              //JSON
+                return StatusCode(StatusCodes.Status500InternalServerError, JsonConvert.SerializeObject(e.Message));
        }
     }
     
@@ -198,12 +213,16 @@ public class DiscountController : ControllerBase
             var result =  _discountService.DeleteDiscountByIdAsync(discountId);
             _logger.LogInformation("Discount deleted.");
             
-            return Ok(result);
+            //return Ok(result);
+            //JSON
+            return Ok(JsonConvert.SerializeObject(result));
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return StatusCode( StatusCodes.Status500InternalServerError, e.Message);
+            //return StatusCode( StatusCodes.Status500InternalServerError, e.Message);
+            //JSON
+            return StatusCode( StatusCodes.Status500InternalServerError, JsonConvert.SerializeObject(e.Message));
         }
     }
 
@@ -226,12 +245,16 @@ public class DiscountController : ControllerBase
         {
             var result = Task.Run(() => _discountService.GetAllDiscountsByUserIdAsync( userId ));
             _logger.LogInformation("Discount retrieved.");
-            return (result.Result != null) ? Ok(result.Result) : NotFound("Discount not found.");
+            //return (result.Result != null) ? Ok(result.Result) : NotFound("Discount not found.");
+            //JSON
+            return (result.Result != null) ? Ok(JsonConvert.SerializeObject(result.Result)) : NotFound("Discount not found.");
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return  StatusCode( StatusCodes.Status500InternalServerError, e.Message);
+            //return  StatusCode( StatusCodes.Status500InternalServerError, e.Message);
+            //JSON
+            return  StatusCode( StatusCodes.Status500InternalServerError, JsonConvert.SerializeObject(e.Message));
         }
     }
 }

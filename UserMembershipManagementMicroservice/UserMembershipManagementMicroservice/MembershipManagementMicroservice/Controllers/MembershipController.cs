@@ -75,14 +75,17 @@ public class MembershipController : ControllerBase
             Task.WhenAll(result1, result2).GetAwaiter().GetResult();
 
             // Return a successful response
-            return Ok(result2.Result); //Ok("Membership creation request sent to Kafka.");
+            //return Ok(result2.Result); //Ok("Membership creation request sent to Kafka.");
+            //JSON format
+            return Ok(JsonConvert.SerializeObject(result2.Result));
         }
         catch (Exception ex)
         {
             // Handle any errors that occur during the process
             // Log the error or return an appropriate error response
             _logger.LogError($"An error occurred while sending the membership creation request: {ex.Message}");
-            return StatusCode(500, "An error occurred while sending the membership creation request.");
+            //return StatusCode(500, "An error occurred while sending the membership creation request.");
+            return StatusCode(500, JsonConvert.SerializeObject("An error occurred while sending the membership creation request."));
         }
     }
  
@@ -113,14 +116,17 @@ public class MembershipController : ControllerBase
             var membership = await _membershipService.GetMembershipAsync(membershipId);
             _logger.LogInformation($"Membership: {membership}");
             
-            return (membership != null) ? Ok(membership) : NotFound($"Membership with ID {membershipId} not found.");
+            //return (membership != null) ? Ok(membership) : NotFound($"Membership with ID {membershipId} not found.");
+            //JSON format
+            return (membership != null) ? Ok(JsonConvert.SerializeObject(membership)) : NotFound(JsonConvert.SerializeObject($"Membership with ID {membershipId} not found."));
             
         }
         catch (Exception ex)
         {
             // Handle any errors that occur during the process
             // Log the error or return an appropriate error response
-            return StatusCode(500, "An error occurred while retrieving the membership data.");
+            //return StatusCode(500, "An error occurred while retrieving the membership data.");
+            return StatusCode(500, JsonConvert.SerializeObject("An error occurred while retrieving the membership data."));
         }
     }
     
@@ -151,14 +157,17 @@ public class MembershipController : ControllerBase
             var memberships = await _membershipService.GetMembershipsByUserIdAsync(userId);
             _logger.LogInformation($"Memberships: {memberships}");
             
-            return (memberships != null) ? Ok(memberships) : NotFound($"Memberships with user ID {userId} not found.");
+            //return (memberships != null) ? Ok(memberships) : NotFound($"Memberships with user ID {userId} not found.");
+            //JSON format
+            return (memberships != null) ? Ok(JsonConvert.SerializeObject(memberships)) : NotFound(JsonConvert.SerializeObject($"Memberships with user ID {userId} not found."));
             
         }
         catch (Exception ex)
         {
             // Handle any errors that occur during the process
             // Log the error or return an appropriate error response
-            return StatusCode(500, "An error occurred while retrieving the memberships data.");
+            //return StatusCode(500, "An error occurred while retrieving the memberships data.");
+            return StatusCode(500, JsonConvert.SerializeObject("An error occurred while retrieving the memberships data."));
         }
     }
     
@@ -196,14 +205,17 @@ public class MembershipController : ControllerBase
             var result = await _membershipService.EditMembershipAsync(membershipId, membership);
             _logger.LogInformation($"Membership: {result}");
             
-            return (result != null) ? Ok(result) : NotFound($"Membership with ID {membershipId} not found.");
+            //return (result != null) ? Ok(result) : NotFound($"Membership with ID {membershipId} not found.");
+            //JSON format
+            return (result != null) ? Ok(JsonConvert.SerializeObject(result)) : NotFound(JsonConvert.SerializeObject($"Membership with ID {membershipId} not found."));
             
         }
         catch (Exception ex)
         {
             // Handle any errors that occur during the process
             // Log the error or return an appropriate error response
-            return StatusCode(500, "An error occurred while updating the membership data.");
+            //return StatusCode(500, "An error occurred while updating the membership data.");
+            return StatusCode(500, JsonConvert.SerializeObject("An error occurred while updating the membership data."));
         }
     }
 }

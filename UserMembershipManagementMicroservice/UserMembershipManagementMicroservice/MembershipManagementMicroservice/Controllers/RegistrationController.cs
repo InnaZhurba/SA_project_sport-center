@@ -93,14 +93,20 @@ public class RegistrationController : ControllerBase
             Task.WhenAll(result1, result2).GetAwaiter().GetResult();
 
             // Return a successful response
-            return Ok(result2.Result); //Ok("User creation request sent to Kafka.");
+            //return Ok(result2.Result); //Ok("User creation request sent to Kafka.");
+            
+            // return in JSON format
+            return Ok(JsonConvert.SerializeObject(result2.Result));
         }
         catch (Exception ex)
         {
             // Handle any errors that occur during the process
             // Log the error or return an appropriate error response
             _logger.LogError($"An error occurred while sending the user creation request: {ex.Message}");
-            return StatusCode(500, "An error occurred while sending the user creation request.");
+            
+            //return in JSON format
+            return StatusCode(500, JsonConvert.SerializeObject($"An error occurred while sending the user creation request: {ex.Message}"));
+            //return StatusCode(500, "An error occurred while sending the user creation request.");
         }
     }
 
@@ -128,14 +134,16 @@ public class RegistrationController : ControllerBase
             var user = await _registrationService.GetUserAsync(userId);
             _logger.LogInformation($"User: {user}");
             
-            return (user != null) ? Ok(user) : NotFound($"User with ID {userId} not found.");
-            
+            //return (user != null) ? Ok(user) : NotFound($"User with ID {userId} not found.");
+            //return in JSON format
+            return (user != null) ? Ok(JsonConvert.SerializeObject(user)) : NotFound(JsonConvert.SerializeObject($"User with ID {userId} not found."));
         }
         catch (Exception ex)
         {
             // Handle any errors that occur during the process
             // Log the error or return an appropriate error response
-            return StatusCode(500, "An error occurred while retrieving the membership data.");
+            //return StatusCode(500, "An error occurred while retrieving the membership data.");
+            return  StatusCode(500, JsonConvert.SerializeObject($"An error occurred while retrieving the membership data: {ex.Message}"));
         }
     }
     
@@ -163,14 +171,15 @@ public class RegistrationController : ControllerBase
             var user = await _registrationService.GetUserByEmailAsync(email);
             _logger.LogInformation($"User: {user}");
             
-            return (user != null) ? Ok(user) : NotFound($"User with email {email} not found.");
-            
+            //return (user != null) ? Ok(user) : NotFound($"User with email {email} not found.");
+            return  (user != null) ? Ok(JsonConvert.SerializeObject(user)) : NotFound(JsonConvert.SerializeObject($"User with email {email} not found."));
         }
         catch (Exception ex)
         {
             // Handle any errors that occur during the process
             // Log the error or return an appropriate error response
-            return StatusCode(500, "An error occurred while retrieving the membership data.");
+            //return StatusCode(500, "An error occurred while retrieving the membership data.");
+            return StatusCode(500, JsonConvert.SerializeObject($"An error occurred while retrieving the membership data: {ex.Message}"));
         }
     }
     
@@ -201,14 +210,16 @@ public class RegistrationController : ControllerBase
             var user = await _registrationService.GetUserByUsernameAndPasswordAsync(username, password);
             _logger.LogInformation($"User: {user}");
             
-            return (user != null) ? Ok(user) : NotFound($"User with username {username} and password {password} not found.");
+            //return (user != null) ? Ok(user) : NotFound($"User with username {username} and password {password} not found.");
+            return (user != null) ? Ok(JsonConvert.SerializeObject(user)) : NotFound(JsonConvert.SerializeObject($"User with username {username} and password {password} not found."));
             
         }
         catch (Exception ex)
         {
             // Handle any errors that occur during the process
             // Log the error or return an appropriate error response
-            return StatusCode(500, "An error occurred while retrieving the membership data.");
+            //return StatusCode(500, "An error occurred while retrieving the membership data.");
+            return StatusCode(500, JsonConvert.SerializeObject($"An error occurred while retrieving the membership data: {ex.Message}"));
         }
     }
     
@@ -239,14 +250,16 @@ public class RegistrationController : ControllerBase
             var user = await _registrationService.GetUserByEmailAndPasswordAsync(email, password);
             _logger.LogInformation($"User: {user}");
             
-            return (user != null) ? Ok(user) : NotFound($"User with email {email} and password {password} not found.");
+            //return (user != null) ? Ok(user) : NotFound($"User with email {email} and password {password} not found.");
+            return (user != null) ? Ok(JsonConvert.SerializeObject(user)) : NotFound(JsonConvert.SerializeObject($"User with email {email} and password {password} not found."));
             
         }
         catch (Exception ex)
         {
             // Handle any errors that occur during the process
             // Log the error or return an appropriate error response
-            return StatusCode(500, "An error occurred while retrieving the membership data.");
+            //return StatusCode(500, "An error occurred while retrieving the membership data.");
+            return StatusCode(500, JsonConvert.SerializeObject($"An error occurred while retrieving the membership data: {ex.Message}"));
         }
     }
     
@@ -282,14 +295,16 @@ public class RegistrationController : ControllerBase
             var result = await _registrationService.EditUserAsync(userId, user);
             _logger.LogInformation($"User: {result}");
             
-            return (result != null) ? Ok(result) : NotFound($"User with ID {userId} not found.");
+            //return (result != null) ? Ok(result) : NotFound($"User with ID {userId} not found.");
+            return (result != null) ? Ok(JsonConvert.SerializeObject(result)) : NotFound(JsonConvert.SerializeObject($"User with ID {userId} not found."));
             
         }
         catch (Exception ex)
         {
             // Handle any errors that occur during the process
             // Log the error or return an appropriate error response
-            return StatusCode(500, "An error occurred while retrieving the membership data.");
+            //return StatusCode(500, "An error occurred while retrieving the membership data.");
+            return StatusCode(500, JsonConvert.SerializeObject($"An error occurred while retrieving the membership data: {ex.Message}"));
         }
     }
 }
